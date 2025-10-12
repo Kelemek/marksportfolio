@@ -427,10 +427,53 @@ body:not(.user-is-tabbing) a:focus {
     font-size: var(--font-size-normal);
 }
 
-/* Fix for Safari iOS background scaling issues */
+/* Fix for Safari iOS background scaling and viewport height issues */
 @media (max-width: 768px) {
     .header {
         background-attachment: scroll;
+        /* Use dvh (dynamic viewport height) for Safari iOS to account for browser UI */
+        height: 100dvh;
+        /* Fallback for older browsers */
+        min-height: 100vh;
+        min-height: 100dvh;
+    }
+    
+    /* Ensure nav stays above header content on mobile */
+    .nav {
+        z-index: 9999;
+        position: fixed;
+    }
+    
+    /* Add padding-top to header text to prevent overlap with nav */
+    .header__text {
+        padding-top: 4rem;
+    }
+}
+
+/* Special handling for landscape mode on mobile devices */
+@media (max-width: 768px) and (orientation: landscape) {
+    .header {
+        /* In landscape, use a minimum height to prevent overlap */
+        height: max(100dvh, 500px);
+        min-height: 500px;
+    }
+    
+    .header__text {
+        /* Increase padding in landscape to account for nav and smaller viewport */
+        padding-top: 6rem;
+        /* Center content better in landscape */
+        top: 55%;
+    }
+    
+    .nav {
+        /* Smaller nav in landscape mode */
+        padding: calc(var(--gutter-x-small) - (var(--gutter-x-small) - 0.3rem) * var(--scroll-progress)) var(--gutter-normal);
+    }
+    
+    .nav__link {
+        /* Smaller nav links in landscape */
+        padding: calc(0.6rem - (0.6rem - 0.25rem) * var(--scroll-progress)) 0;
+        font-size: calc(0.85em - (0.85em - 0.75em) * var(--scroll-progress));
     }
 }
 
