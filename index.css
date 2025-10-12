@@ -314,8 +314,8 @@ body:not(.user-is-tabbing) a:focus {
     z-index: 1000;
     --scroll-progress: 0;
     
-    /* Progressive padding based on scroll */
-    padding: calc(var(--gutter-normal) - (var(--gutter-normal) - var(--gutter-x-small)) * var(--scroll-progress)) var(--gutter-medium);
+    /* Progressive padding based on scroll - align with content */
+    padding: calc(var(--gutter-normal) - (var(--gutter-normal) - var(--gutter-x-small)) * var(--scroll-progress)) 0;
     
     /* Progressive semi-transparent background */
     background: rgba(0, 0, 0, calc(0.5 * var(--scroll-progress)));
@@ -324,20 +324,48 @@ body:not(.user-is-tabbing) a:focus {
     backdrop-filter: blur(calc(10px * var(--scroll-progress)));
 }
 
+/* Navigation content container to match .row alignment */
+.nav__items {
+    display: flex;
+    list-style: none;
+    max-width: var(--container-max-width);
+    width: 100%;
+    margin: 0 auto;
+    justify-content: flex-end;
+}
+
+/* Responsive padding to match .row */
+@media(max-width: 1340px) {
+    .nav__items {
+        max-width: 1100px;
+    }
+}
+
+@media(max-width: 1240px) {
+    .nav__items {
+        padding: 0 var(--gutter-medium);
+    }
+}
+
+@media(max-width: 600px) {
+    .nav__items {
+        padding: 0 var(--gutter-normal);
+    }
+}
+
 .nav__item:not(:last-child) {
     /* Progressive margin based on scroll */
     margin-right: calc(var(--gutter-normal) - (var(--gutter-normal) - var(--gutter-small)) * var(--scroll-progress));
 }
 
-.nav__items {
-    display: flex;
-    list-style: none;
-}
-
 @media(max-width: 500px) {
     .nav {
+        padding: calc(var(--gutter-x-small) - (var(--gutter-x-small) - 0.5rem) * var(--scroll-progress)) 0;
+    }
+    
+    .nav__items {
         justify-content: center;
-        padding: calc(var(--gutter-x-small) - (var(--gutter-x-small) - 0.5rem) * var(--scroll-progress)) var(--gutter-normal);
+        padding: 0 var(--gutter-small);
     }
     
     .nav__link {
@@ -509,10 +537,78 @@ body:not(.user-is-tabbing) a:focus {
     align-items: center;
 }
 
+/* Create a container that matches navigation alignment exactly */
+.work__boxes {
+    max-width: var(--container-max-width);
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* Responsive width matching navigation exactly */
+@media(max-width: 1340px) {
+    .work__boxes {
+        max-width: 1100px;
+    }
+}
+
+@media(max-width: 1240px) {
+    .work__boxes {
+        padding: 0 var(--gutter-medium);
+    }
+}
+
 @media(max-width: 900px) {
     .work__box {
         align-items: initial;
         flex-direction: column-reverse;
+    }
+}
+
+@media(max-width: 600px) {
+    .work__boxes {
+        padding: 0 var(--gutter-normal);
+    }
+}
+
+@media(max-width: 500px) {
+    .work__boxes {
+        padding: 0 var(--gutter-small);
+    }
+}
+
+/* Override .row padding for work sections to allow work__box to handle alignment */
+.work .row {
+    padding: 0;
+    max-width: none;
+}
+
+/* Keep heading alignment with navigation */
+.work h2 {
+    max-width: var(--container-max-width);
+    margin: 0 auto var(--gutter-medium) auto;
+}
+
+@media(max-width: 1340px) {
+    .work h2 {
+        max-width: 1100px;
+    }
+}
+
+@media(max-width: 1240px) {
+    .work h2 {
+        padding: 0 var(--gutter-medium);
+    }
+}
+
+@media(max-width: 600px) {
+    .work h2 {
+        padding: 0 var(--gutter-normal);
+    }
+}
+
+@media(max-width: 500px) {
+    .work h2 {
+        padding: 0 var(--gutter-small);
     }
 }
 
@@ -559,13 +655,170 @@ body:not(.user-is-tabbing) a:focus {
 @media(min-width: 901px) {
     .work__image-box {
         flex: 1;
-        margin: 0 0 0 10rem;
+        margin-left: 10rem;
     }
 }
 
 @media(max-width: 900px) {
     .work__code {
         height: 4rem;
+    }
+}
+
+/* Drawing image styling for better fit */
+.work__image {
+    width: 100%;
+    height: 500px; /* Match iframe height */
+    object-fit: cover;
+    object-position: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.work__image:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(255, 50, 88, 0.2);
+}
+
+@media(max-width: 768px) {
+    .work__image {
+        height: 400px; /* Match iframe height */
+    }
+}
+
+@media(max-width: 500px) {
+    .work__image {
+        height: 350px; /* Match iframe height */
+        border-radius: 4px;
+    }
+}
+
+/* Loading placeholder for iframe upgrades */
+.loading-placeholder {
+    position: relative;
+}
+
+.loading-indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.8);
+    color: var(--white-1);
+    padding: var(--gutter-x-small);
+    text-align: center;
+    font-size: 1.2rem;
+    backdrop-filter: blur(5px);
+    border-radius: 0 0 8px 8px;
+    transition: opacity 0.3s ease;
+}
+
+.loading-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.loading-text::after {
+    content: '';
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--pink);
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Mobile adjustments for loading indicator */
+@media (max-width: 500px) {
+    .loading-indicator {
+        padding: 0.5rem;
+        font-size: 1rem;
+    }
+}
+
+/* Iframe styling for interactive project previews */
+.work__iframe {
+    width: 100%;
+    height: 500px; /* Reduced height since we're not scaling as much */
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    background: var(--white-1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* Less scaling to show content wider */
+    transform: scale(1);
+    transform-origin: center top;
+}
+
+.work__iframe:hover {
+    transform: scale(1) translateY(-5px);
+    box-shadow: 0 8px 30px rgba(255, 50, 88, 0.2);
+}
+
+/* Wrapper to contain the iframe */
+.work__image-box {
+    overflow: hidden;
+    border-radius: 8px;
+    height: 500px; /* Match iframe height since no scaling */
+    margin-bottom: var(--gutter-normal);
+}
+
+@media(max-width: 768px) {
+    .work__iframe {
+        height: 400px;
+        transform: scale(1); /* No scaling for wider content */
+        transform-origin: center top;
+    }
+    
+    .work__iframe:hover {
+        transform: scale(1) translateY(-4px);
+    }
+    
+    .work__image-box {
+        height: 400px; /* Match iframe height */
+        /* Re-enable centering for smaller screens */
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
+    
+    .work__image {
+        height: 400px;
+    }
+}
+
+@media(max-width: 500px) {
+    .work__iframe {
+        height: 350px;
+        border-radius: 4px;
+        transform: scale(1); /* No scaling for wider content */
+        transform-origin: center top;
+    }
+    
+    .work__iframe:hover {
+        transform: scale(1) translateY(-3px);
+    }
+    
+    .work__image-box {
+        border-radius: 4px;
+        height: 350px; /* Match iframe height */
+        /* Re-enable centering for mobile */
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
+    
+    .work__image {
+        height: 350px;
+        border-radius: 4px;
     }
 }
 
@@ -614,6 +867,23 @@ body:not(.user-is-tabbing) a:focus {
 
 .about__photo-container {
     margin-bottom: var(--gutter-normal);
+}
+
+.about__photo {
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.about__photo:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(255, 50, 88, 0.2);
+}
+
+@media(max-width: 500px) {
+    .about__photo {
+        border-radius: 4px;
+    }
 }
 
 @media(min-width: 901px) {
