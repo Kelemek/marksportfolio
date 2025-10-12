@@ -21,27 +21,7 @@ const handleMouseDownOnce = () => {
 
 window.addEventListener('keydown', handleFirstTab)
 
-const backToTopButton = document.querySelector(".back-to-top");
-let isBackToTopRendered = false;
-
-let alterStyles = (isBackToTopRendered) => {
-  backToTopButton.style.visibility = isBackToTopRendered ? "visible" : "hidden";
-  backToTopButton.style.opacity = isBackToTopRendered ? 1 : 0;
-  backToTopButton.style.transform = isBackToTopRendered
-    ? "scale(1)"
-    : "scale(0)";
-};
-
 window.addEventListener("scroll", () => {
-  // Back to top button logic
-  if (window.scrollY > 700) {
-    isBackToTopRendered = true;
-    alterStyles(isBackToTopRendered);
-  } else {
-    isBackToTopRendered = false;
-    alterStyles(isBackToTopRendered);
-  }
-  
   // Navigation scroll effect - progressive transition
   const nav = document.querySelector('.nav');
   const scrollY = window.scrollY;
