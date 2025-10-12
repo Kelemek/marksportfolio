@@ -33,12 +33,31 @@ let alterStyles = (isBackToTopRendered) => {
 };
 
 window.addEventListener("scroll", () => {
+  // Back to top button logic
   if (window.scrollY > 700) {
     isBackToTopRendered = true;
     alterStyles(isBackToTopRendered);
   } else {
     isBackToTopRendered = false;
     alterStyles(isBackToTopRendered);
+  }
+  
+  // Navigation scroll effect - progressive transition
+  const nav = document.querySelector('.nav');
+  const scrollY = window.scrollY;
+  const maxScroll = 300; // Distance over which to complete the transition
+  
+  // Calculate progress (0 to 1)
+  const progress = Math.min(scrollY / maxScroll, 1);
+  
+  // Apply progressive styles based on scroll progress
+  nav.style.setProperty('--scroll-progress', progress);
+  
+  // Add class for any additional styling if needed
+  if (progress > 0.05) {
+    nav.classList.add('nav--scrolled');
+  } else {
+    nav.classList.remove('nav--scrolled');
   }
 });
 

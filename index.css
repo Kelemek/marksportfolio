@@ -58,6 +58,7 @@ html {
     font-size: 62.5%; /* (16/10)*100 = 62.5% => 1rem = 10px */
     box-sizing: border-box;
     scroll-behavior: smooth;
+    scroll-padding-top: 4rem; /* Account for smaller scrolled nav when scrolling to anchors */
 }
 
 @media(max-width: 1000px) {
@@ -338,7 +339,26 @@ body:not(.user-is-tabbing) a:focus {
 .nav {
     display: flex;
     justify-content: flex-end;
-    padding: var(--gutter-normal) 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    --scroll-progress: 0;
+    
+    /* Progressive padding based on scroll */
+    padding: calc(var(--gutter-normal) - (var(--gutter-normal) - var(--gutter-x-small)) * var(--scroll-progress)) var(--gutter-medium);
+    
+    /* Progressive semi-transparent background */
+    background: rgba(0, 0, 0, calc(0.5 * var(--scroll-progress)));
+    
+    /* Progressive backdrop blur */
+    backdrop-filter: blur(calc(10px * var(--scroll-progress)));
+}
+
+.nav__item:not(:last-child) {
+    /* Progressive margin based on scroll */
+    margin-right: calc(var(--gutter-medium) - (var(--gutter-medium) - var(--gutter-small)) * var(--scroll-progress));
 }
 
 .nav__items {
@@ -346,13 +366,29 @@ body:not(.user-is-tabbing) a:focus {
     list-style: none;
 }
 
-.nav__item:not(:last-child) {
-    margin-right: var(--gutter-medium);
-}
-
 @media(max-width: 500px) {
     .nav {
         justify-content: center;
+        padding: calc(var(--gutter-small) - (var(--gutter-small) - 0.5rem) * var(--scroll-progress)) var(--gutter-normal);
+    }
+    
+    .nav__link {
+        padding: calc(var(--gutter-small) - (var(--gutter-small) - 0.3rem) * var(--scroll-progress)) 0;
+        font-size: calc(1em - (1em - 0.85em) * var(--scroll-progress));
+    }
+    
+    .nav__item:not(:last-child) {
+        margin-right: calc(var(--gutter-medium) - (var(--gutter-medium) - var(--gutter-x-small)) * var(--scroll-progress));
+    }
+    
+    html {
+        scroll-padding-top: 6rem;
+    }
+}
+
+@media(max-width: 400px) {
+    .nav {
+        padding: calc(var(--gutter-small) - (var(--gutter-small) - 0.5rem) * var(--scroll-progress)) var(--gutter-small);
     }
 }
 
@@ -371,10 +407,15 @@ body:not(.user-is-tabbing) a:focus {
 .nav__link {
     position: relative;
     display: inline-block;
-    padding: 1rem 0;
     text-decoration: none;
     color: inherit;
-    transition: all .2s;
+    
+    /* Progressive text-shadow that fades as background appears */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, calc(0.5 * (1 - var(--scroll-progress))));
+    
+    /* Progressive padding and font-size based on scroll */
+    padding: calc(1rem - (1rem - 0.5rem) * var(--scroll-progress)) 0;
+    font-size: calc(1em - (1em - 0.9em) * var(--scroll-progress));
 }
 
 .nav__link::after {
