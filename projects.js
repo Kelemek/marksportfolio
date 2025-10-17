@@ -2,6 +2,16 @@
 const projectsData = {
   coding: [
     {
+      id: 'prayer-app',
+      title: 'Prayer Manager',
+      description: 'This is a site that I am currently working on to manage our prayer chain at our church.',
+      technologies: ['React', 'React Routing', 'Supabase', 'Supabase Authentication', "Typescript", "Tailwind CSS"],
+      siteUrl: 'https://cp-church-prayer.netlify.app/',
+      githubUrl: 'https://github.com/Kelemek/prayerapp',
+      image: '',
+      imageAlt: 'Prayer app using react and supabase'
+    },
+    {
       id: 'sales-dashboard',
       title: 'Sales Dashboard',
       description: 'This is a sales dashboard written in React with a Supabase backend. Also utilizing React routing and Supabase authentication.',
