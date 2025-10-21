@@ -5,7 +5,7 @@ const projectsData = {
       id: 'prayer-app',
       title: 'Prayer Manager',
       description: 'This is a site that I am currently working on to manage our prayer chain at our church.',
-      technologies: ['React', 'React Routing', 'Supabase', 'Supabase Authentication', "Typescript", "Tailwind CSS", "Resend API"],
+      technologies: ['React', 'React Routing', 'Supabase', 'Supabase Authentication', "Typescript", "Tailwind CSS", "Resend API", "MailChimp API", "Planning Center API"],
       siteUrl: 'https://cp-church-prayer.netlify.app/',
       githubUrl: 'https://github.com/Kelemek/prayerapp',
       image: '',
@@ -32,14 +32,14 @@ const projectsData = {
       imageAlt: 'Travel API built for Node.js'
     },
     {
-      id: 'coding-endgame',
+      id: 'typed-coding-endgame',
       title: 'Coding Endgame',
-      description: 'This is a hangman style game written in React',
-      technologies: ['HTML', 'CSS', 'React'],
-      siteUrl: 'https://coding-endgame.netlify.app/',
-      githubUrl: 'https://github.com/Kelemek/react-endgame',
+      description: 'This is a hangman style game written in React and TypeScript',
+      technologies: ['HTML', 'CSS', 'React', 'Typescript'],
+      siteUrl: 'https://typedendgame.netlify.app',
+      githubUrl: 'https://github.com/Kelemek/Typescript_Endgame',
       image: './images/endgame.webp',
-      imageAlt: 'Game of hangman built in React'
+      imageAlt: 'Game of hangman built in React and typescript'
     },
     {
       id: 'tenzies-game',
