@@ -5,7 +5,7 @@ const projectsData = {
       id: 'prayer-app',
       title: 'Prayer Manager',
       description: 'This is a site that I am currently working on to manage our prayer chain at our church.',
-      technologies: ['React', 'React Routing', 'Supabase', 'Supabase Authentication', "Typescript", "Tailwind CSS", "Resend API", "MailChimp API", "Planning Center API"],
+      technologies: ['React', 'React Routing', 'Supabase', 'Supabase Authentication', "Typescript", "Tailwind CSS", "Resend API", "MailChimp API", "Planning Center API", "Email 2FA"],
       siteUrl: 'https://cp-church-prayer.netlify.app/',
       githubUrl: 'https://github.com/Kelemek/prayerapp',
       image: '',
