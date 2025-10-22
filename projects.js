@@ -34,7 +34,7 @@ const projectsData = {
     {
       id: 'typed-coding-endgame',
       title: 'Coding Endgame',
-      description: 'This is a hangman style game written in React and TypeScript',
+      description: 'This is a hangman style game written in React and then refactored in TypeScript',
       technologies: ['HTML', 'CSS', 'React', 'Typescript'],
       siteUrl: 'https://typedendgame.netlify.app',
       githubUrl: 'https://github.com/Kelemek/Typescript_Endgame',
@@ -44,8 +44,8 @@ const projectsData = {
     {
       id: 'tenzies-game',
       title: 'Game of Tenzies',
-      description: 'This was a fun project to build in React.',
-      technologies: ['HTML', 'CSS', 'React'],
+      description: 'This was a fun project to build in React and then refactored in Typescript',
+      technologies: ['HTML', 'CSS', 'React', 'Typescript'],
       siteUrl: 'https://my-tenzies-dicegame.netlify.app/',
       githubUrl: 'https://github.com/Kelemek/react-tenzies',
       image: './images/tenzies.webp',
