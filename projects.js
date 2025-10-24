@@ -2,6 +2,16 @@
 const projectsData = {
   coding: [
     {
+      id: 'gospel-presentation',
+      title: 'Gospel Presentation',
+      description: 'This is a site that I created to help in my biblical counceling at our church. It also has an admin site that alows creation of custom profiles that allow the user to fully customize all the text and scripture references.',
+      technologies: ['Next.JS', 'Netlify Blobs', "Typescript", "Tailwind CSS", "ESV API"],
+      siteUrl: 'https://gospelpresentation.netlify.app/',
+      githubUrl: 'https://github.com/Kelemek/gospel_presentation',
+      image: '',
+      imageAlt: 'Gospel Presentation site'
+    },
+    {
       id: 'prayer-app',
       title: 'Prayer Manager',
       description: 'This is a site that I am currently working on to manage our prayer chain at our church.',
