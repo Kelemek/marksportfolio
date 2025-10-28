@@ -22,16 +22,6 @@ const projectsData = {
       imageAlt: 'Prayer app using react and supabase'
     },
     {
-      id: 'sales-dashboard',
-      title: 'Sales Dashboard',
-      description: 'This is a sales dashboard written in React with a Supabase backend. Also utilizing React routing and Supabase authentication.',
-      technologies: ['React', 'React Routing', 'Supabase', 'Supabase Authentication'],
-      siteUrl: 'https://react-salesdesktop.netlify.app/',
-      githubUrl: 'https://github.com/Kelemek/react-salesdesktop',
-      image: './images/react_salesdashboard.webp',
-      imageAlt: 'Sales Dashboard built with React and Supabase'
-    },
-    {
       id: 'travel-api',
       title: 'My Travel API',
       description: 'This is a travel API written for Node.js but modified to run in Netlify.',
