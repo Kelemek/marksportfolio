@@ -6,7 +6,7 @@ const projectsData = {
       title: 'Gospel Presentation',
       description: 'This is a site that I created to help in my biblical counceling at our church. It also has an admin site that alows creation of custom profiles that allow the user to fully customize all the text and scripture references.',
       technologies: ['Next.JS', 'Netlify Blobs', "Typescript", "Tailwind CSS", "ESV API"],
-      siteUrl: 'https://gospelpresentation.netlify.app/',
+      siteUrl: 'https://gospel-presentation.vercel.app/',
       githubUrl: 'https://github.com/Kelemek/gospel_presentation',
       image: '',
       imageAlt: 'Gospel Presentation site'
@@ -16,7 +16,7 @@ const projectsData = {
       title: 'Prayer Manager',
       description: 'This is a site that I am currently working on to manage our prayer chain at our church.',
       technologies: ['React', 'React Routing', 'Supabase', 'Supabase Authentication', "Typescript", "Tailwind CSS", "Resend API", "MailChimp API", "Planning Center API", "Email 2FA"],
-      siteUrl: 'https://cp-church-prayer.netlify.app/',
+      siteUrl: 'https://cp-church-prayer.vercel.app/',
       githubUrl: 'https://github.com/Kelemek/prayerapp',
       image: '',
       imageAlt: 'Prayer app using react and supabase'
