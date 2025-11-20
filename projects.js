@@ -15,7 +15,7 @@ const projectsData = {
       id: 'prayer-app',
       title: 'Prayer Manager',
       description: 'This is a site that I am currently working on to manage our prayer chain at our church.',
-      technologies: ['React', 'React Routing', 'Supabase', 'Supabase Auth', 'Magic Link', "Typescript", "Tailwind CSS", "Resend API", "MailChimp API", "Planning Center API", "Email 2FA"],
+      technologies: ['React', 'React Routing', 'Supabase', 'Supabase Auth', 'Magic Link', "Typescript", "Tailwind CSS", "Microsoft Graph API for Email", "Planning Center API", "Email 2FA"],
       siteUrl: 'https://cp-church-prayer.vercel.app/',
       githubUrl: 'https://github.com/Kelemek/prayerapp',
       image: '',
