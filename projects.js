@@ -92,16 +92,6 @@ const projectsData = {
       imageAlt: 'Password generator site with and without generated passwords.'
     },
     {
-      id: 'favorites-tracker',
-      title: 'Favorites Tracker',
-      description: 'Bookmark your favorite sites to store them in a database. This app allows you to add and delete bookmarks that are persisted to a Firebase database.',
-      technologies: ['HTML', 'CSS', 'JavaScript', 'Firebase'],
-      siteUrl: 'https://my-leads-tracker-phone-app.netlify.app/',
-      githubUrl: 'https://github.com/Kelemek/leadstrackerapp',
-      image: './images/leads_tracker.webp',
-      imageAlt: 'Favorites tracker website showing saved sites.'
-    },
-    {
       id: 'hometown-parks',
       title: 'Hometown Parks',
       description: 'Site that shows my favorite parks in my hometown of Cambridge, Minnesota.',
