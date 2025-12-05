@@ -17,7 +17,7 @@ export default async function AdminLayout({
 
   return (
     <div className="min-h-screen bg-black">
-      <nav className="bg-border-light border-b border-border-light">
+      <nav className="admin-nav bg-border-light border-b border-border-light">
         <div className="max-w-container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-6">
             <a href="/admin" className="text-white font-heading text-xl">
@@ -32,7 +32,6 @@ export default async function AdminLayout({
             </a>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-white-1 text-sm">{user.email}</span>
             <form action="/auth/signout" method="POST">
               <button
                 type="submit"
