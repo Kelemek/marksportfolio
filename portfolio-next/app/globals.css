@@ -242,3 +242,91 @@ img {
     @apply rounded;
   }
 }
+
+/* Admin tables: responsive stacked cards on small screens */
+@media (max-width: 640px) {
+  .admin-section table {
+    width: 100%;
+    border-collapse: separate;
+  }
+
+  .admin-section table thead {
+    display: none;
+  }
+
+  .admin-section table tbody {
+    display: block;
+  }
+
+  .admin-section table tbody tr {
+    display: block;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    background: rgba(255,255,255,0.02);
+    border-radius: 0.5rem;
+  }
+
+  .admin-section table tbody tr td {
+    display: block;
+    padding: 0.25rem 0.5rem;
+    border: none;
+  }
+
+  /* Row 1: drag handle (first td) */
+  .admin-section table tbody tr td:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 0.25rem;
+  }
+
+  /* Row 2: title/description (second td) */
+  .admin-section table tbody tr td:nth-child(2) {
+    font-weight: 600;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+  }
+
+  /* Row 3: status (third td) and actions (fourth td) sit side-by-side */
+  .admin-section table tbody tr .status-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-top: 0.25rem;
+  }
+
+  .admin-section table tbody tr td:nth-child(3) {
+    display: inline-flex;
+    width: 50%;
+    justify-content: flex-start;
+    padding-left: 0.5rem;
+  }
+
+  .admin-section table tbody tr td:nth-child(4) {
+    display: inline-flex;
+    width: 50%;
+    justify-content: flex-end;
+    padding-right: 0.5rem;
+  }
+
+  /* Make table container scrollable horizontally if needed */
+  .admin-section .bg-border-light {
+    overflow: visible;
+    padding: 0.25rem;
+  }
+
+  /* Reduce padding on small screens */
+  .admin-section h2 {
+    margin-bottom: 0.5rem;
+  }
+
+  /* Slightly larger tap targets */
+  .admin-section .px-4.py-3,
+  .admin-section .px-2.py-3 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+}
