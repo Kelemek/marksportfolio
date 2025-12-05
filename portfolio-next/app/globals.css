@@ -393,4 +393,13 @@ img {
     padding-right: 0.75rem;
     font-size: 0.875rem;
   }
+
+  /* Reduce very large h1 used on admin edit page at small screens
+     Targets the h1 that follows the admin nav to avoid affecting
+     main site headings. */
+  .admin-nav + main h1.text-large {
+    font-size: 1.75rem; /* ~28px */
+    line-height: 1.25;
+    margin-bottom: 0.75rem;
+  }
 }
