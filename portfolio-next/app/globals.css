@@ -129,6 +129,17 @@ img {
   transition: padding 0.1s ease-out;
 }
 
+/* On small screens, always use the compact nav size */
+@media (max-width: 640px) {
+  .nav {
+    --scroll-progress: 1;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.5);
+  }
+}
+
 /* Navigation scroll styles */
 .nav--scrolled {
   backdrop-filter: blur(calc(10px * var(--scroll-progress)));
@@ -141,6 +152,13 @@ img {
   gap: calc(3rem - (3rem - 1.5rem) * var(--scroll-progress));
 }
 
+/* On small screens, use compact gap */
+@media (max-width: 640px) {
+  .nav__items {
+    gap: 1rem;
+  }
+}
+
 /* Nav link styles */
 .nav__link {
   @apply relative inline-block no-underline transition-all;
@@ -149,6 +167,15 @@ img {
   /* Progressive padding and font-size based on scroll */
   padding: calc(1rem - (1rem - 0.5rem) * var(--scroll-progress)) 0;
   font-size: calc(1.125rem - (1.125rem - 0.9rem) * var(--scroll-progress));
+}
+
+/* On small screens, use compact link styles */
+@media (max-width: 640px) {
+  .nav__link {
+    padding: 0.5rem 0;
+    font-size: 0.9rem;
+    text-shadow: none;
+  }
 }
 
 .nav__link::after {
