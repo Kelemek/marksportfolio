@@ -26,7 +26,7 @@ export default async function AdminDashboard() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-4 admin-header">
         <h1 className="text-large font-heading text-white">Projects</h1>
         <Link
           href="/admin/projects/new"
