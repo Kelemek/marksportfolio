@@ -1,0 +1,217 @@
+/* stylelint-disable */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Restore list markers (Tailwind base resets them) */
+ul.list-square {
+  list-style-type: square;
+}
+ol.list-decimal {
+  list-style: revert;
+}
+
+/* Custom fonts */
+@font-face {
+  font-family: "Hk Grotesk";
+  font-style: normal;
+  font-weight: 400;
+  src: url("/fonts/HKGrotesk-Regular.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Jost";
+  font-style: normal;
+  font-weight: 400;
+  src: url("/fonts/Jost-Regular.ttf") format("truetype");
+}
+
+/* Base styles */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 4rem;
+}
+
+body {
+  @apply bg-black text-white-1;
+  font-family: "Hk Grotesk", sans-serif;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* Focus visible for accessibility */
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  @apply outline-2 outline-pink outline-offset-2;
+}
+
+/* Headings */
+h1,
+h2,
+h3 {
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
+  line-height: 1.2;
+  @apply text-white;
+}
+
+h2::after {
+  content: "";
+  display: block;
+  height: 2px;
+  width: 10rem;
+  @apply bg-pink mt-gutter-small mb-gutter-small;
+}
+
+/* Links */
+a {
+  font-family: "Jost", sans-serif;
+  font-weight: 400;
+  @apply text-white transition-all duration-200;
+}
+
+/* Sections - only apply to main site, not admin */
+section:not(.admin-section) {
+  @apply py-24 border-b border-border-light;
+}
+
+/* Images */
+img {
+  object-fit: contain;
+  max-width: 100%;
+}
+
+/* Container utility */
+.row {
+  @apply max-w-container mx-auto px-gutter-normal lg:px-gutter-medium xl:px-0;
+}
+
+/* Button styles */
+.btn {
+  @apply relative isolate inline-block py-4 px-10 border border-pink text-white no-underline font-normal;
+  font-family: "Jost", sans-serif;
+}
+
+.btn::after {
+  content: "";
+  @apply block absolute top-0 left-0 right-full bg-white h-full -z-10 transition-all duration-200;
+}
+
+.btn:hover::after,
+.btn:focus::after {
+  @apply right-0 bg-pink;
+}
+
+/* Link text style */
+.link__text {
+  @apply relative inline-block py-2 text-white no-underline border-b border-pink;
+}
+
+.link__text::after {
+  content: "";
+  @apply block absolute top-0 left-0 right-full bg-white h-full -z-10 transition-all duration-200;
+}
+
+.link__text:hover::after,
+.link__text:focus::after {
+  @apply right-0 bg-pink;
+}
+
+/* Navigation scroll progress CSS variable */
+.nav {
+  --scroll-progress: 0;
+  /* Progressive padding based on scroll - starts large, shrinks to small */
+  padding-top: calc(3rem - (3rem - 0.5rem) * var(--scroll-progress));
+  padding-bottom: calc(3rem - (3rem - 0.5rem) * var(--scroll-progress));
+  transition: padding 0.1s ease-out;
+}
+
+/* Navigation scroll styles */
+.nav--scrolled {
+  backdrop-filter: blur(calc(10px * var(--scroll-progress)));
+  background: rgba(0, 0, 0, calc(0.5 * var(--scroll-progress)));
+}
+
+/* Nav items container - progressive spacing */
+.nav__items {
+  /* Progressive gap between items */
+  gap: calc(3rem - (3rem - 1.5rem) * var(--scroll-progress));
+}
+
+/* Nav link styles */
+.nav__link {
+  @apply relative inline-block no-underline transition-all;
+  /* Progressive text-shadow that fades as background appears */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, calc(0.5 * (1 - var(--scroll-progress))));
+  /* Progressive padding and font-size based on scroll */
+  padding: calc(1rem - (1rem - 0.5rem) * var(--scroll-progress)) 0;
+  font-size: calc(1.125rem - (1.125rem - 0.9rem) * var(--scroll-progress));
+}
+
+.nav__link::after {
+  content: '';
+  @apply absolute bottom-0 left-0 right-full block h-4 bg-white transition-all;
+  transition-timing-function: cubic-bezier(1, 0.68, 0.16, 0.9);
+}
+
+.nav__link:hover {
+  @apply text-pink;
+}
+
+.nav__link:hover::after {
+  @apply right-0 bg-pink;
+  height: 2px;
+}
+
+/* Iframe styling */
+.work__iframe {
+  @apply w-full border-none rounded-lg shadow-lg bg-white-1 transition-all duration-300;
+  height: 500px;
+}
+
+.work__iframe:hover {
+  @apply -translate-y-1;
+  box-shadow: 0 8px 30px rgba(255, 50, 88, 0.2);
+}
+
+/* Work image styling */
+.work__image {
+  @apply w-full rounded-lg shadow-lg transition-all duration-300;
+  height: 500px;
+  object-fit: cover;
+  object-position: center;
+}
+
+.work__image:hover {
+  @apply -translate-y-1;
+  box-shadow: 0 8px 30px rgba(255, 50, 88, 0.2);
+}
+
+/* About photo */
+.about__photo {
+  @apply rounded-lg shadow-lg transition-all duration-300;
+}
+
+.about__photo:hover {
+  @apply -translate-y-1;
+  box-shadow: 0 8px 30px rgba(255, 50, 88, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .work__iframe,
+  .work__image {
+    height: 400px;
+  }
+}
+
+@media (max-width: 500px) {
+  .work__iframe,
+  .work__image {
+    height: 350px;
+    @apply rounded;
+  }
+}

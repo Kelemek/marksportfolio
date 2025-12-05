@@ -1,0 +1,10 @@
+{
+  "name": "marksportfolio",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev --prefix portfolio-next",
+    "build": "npm run build --prefix portfolio-next",
+    "start": "npm run start --prefix portfolio-next",
+    "lint": "npm run lint --prefix portfolio-next"
+  }
+}
