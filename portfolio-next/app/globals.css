@@ -316,9 +316,11 @@ img {
     padding: 0.25rem;
   }
 
-  /* Reduce padding on small screens */
+  /* Reduce padding on small screens and make section headers slightly smaller */
   .admin-section h2 {
     margin-bottom: 0.5rem;
+    font-size: 1.125rem; /* ~18px */
+    line-height: 1.3rem;
   }
 
   /* Slightly larger tap targets */
@@ -328,5 +330,20 @@ img {
     padding-right: 0.5rem;
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
+  }
+
+  /* Smaller header and Add Project button in admin at smallest screens */
+  .admin-header h1 {
+    font-size: 1.5rem; /* ~24px - larger for clarity */
+    line-height: 1.25rem;
+    margin-right: 0.5rem;
+  }
+
+  .admin-header .btn {
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    font-size: 0.875rem;
   }
 }
