@@ -140,6 +140,53 @@ img {
   }
 }
 
+/* Admin nav: keep items on one line and truncate long text on small screens */
+@media (max-width: 640px) {
+  /* Ensure admin nav container keeps its two child groups on a single line
+     but allow the left group to shrink so the right-side (sign out) stays visible */
+  .admin-nav .max-w-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    flex-wrap: nowrap;
+  }
+
+  .admin-nav .max-w-container > div:first-child {
+    min-width: 0; /* allow left group to shrink */
+    flex-shrink: 1;
+  }
+
+  .admin-nav .max-w-container > div:last-child {
+    flex-shrink: 0; /* keep sign out area visible */
+  }
+
+  .admin-nav a,
+  .admin-nav .text-white-1,
+  .admin-nav span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Ensure buttons (like Sign Out) are not clipped */
+  .admin-nav button {
+    white-space: nowrap;
+  }
+
+  /* Allow the center space to shrink when needed */
+  .admin-nav .max-w-container > div > :first-child {
+    min-width: 0;
+  }
+
+  /* Slightly reduce font-size of right-side items on very small widths */
+  @media (max-width: 420px) {
+    .admin-nav .max-w-container > div > :last-child {
+      font-size: 0.9rem;
+    }
+  }
+}
+
 /* Navigation scroll styles */
 .nav--scrolled {
   backdrop-filter: blur(calc(10px * var(--scroll-progress)));
