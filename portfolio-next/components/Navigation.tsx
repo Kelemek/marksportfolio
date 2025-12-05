@@ -9,7 +9,7 @@ const navLinks = [
   { href: "#drawing", label: "Drawing" },
   { href: "#about", label: "About" },
   { href: "#contact", label: "Contact" },
-  { href: "https://marklarsonresume.netlify.app", label: "Resumé", external: true },
+  { href: "https://resume.romans8.net", label: "Resumé", external: true },
 ];
 
 export default function Navigation() {

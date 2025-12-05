@@ -30,7 +30,7 @@ export default function AboutSection() {
               portraits on my iPad in my free time.
             </p>
             <a
-              href="https://marklarsonresume.netlify.app"
+              href="https://resume.romans8.net"
               className="btn"
               target="_blank"
               rel="noopener noreferrer"
