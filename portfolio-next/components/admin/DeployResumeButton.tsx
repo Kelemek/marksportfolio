@@ -47,7 +47,7 @@ export default function DeployResumeButton() {
         ? "✓ Deploy Started!"
         : status === "error"
         ? "✗ Deploy Failed"
-        : "Deploy Resume Site"}
+        : "Redeploy Resume"}
     </button>
   );
 }
