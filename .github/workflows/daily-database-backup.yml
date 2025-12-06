@@ -30,10 +30,10 @@ jobs:
           npm ci --silent || npm install --no-audit --no-fund
 
       - name: Run backup script
-        working-directory: portfolio-next
         run: |
-          mkdir -p backups
-          node ../scripts/backup-database-json.js
+          # Run from the repository root so the script's paths and module resolution work as expected
+          mkdir -p portfolio-next/backups
+          node scripts/backup-database-json.js
 
       - name: Upload backups as artifact
         uses: actions/upload-artifact@v4
