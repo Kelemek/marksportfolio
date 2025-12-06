@@ -59,10 +59,11 @@ export default function CertificateForm({
       .replace(/^_|_$/g, "");
     const fileName = `${sanitizedTitle}-${Date.now()}.${fileExt}`;
 
+    const contentType = file.type || (fileExt === 'pdf' ? 'application/pdf' : 'application/octet-stream');
     const { error: uploadError } = await supabase.storage
       .from("certificates")
       .upload(fileName, file, {
-        contentType: "application/pdf",
+        contentType,
         upsert: true,
       });
 
@@ -216,21 +217,21 @@ export default function CertificateForm({
         <label className="block text-white mb-2">Certificate PDF</label>
         {certificate?.pdf_path && (
           <p className="text-white-1 text-sm mb-2">
-            Current:{" "}
+            Current: {" "}
             <a
-              href={certificate.pdf_path}
+              href={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/certificates/${certificate.pdf_path}`}
               target="_blank"
               rel="noopener noreferrer"
               className="text-pink hover:underline"
             >
-              View PDF
+              View file
             </a>
           </p>
         )}
         <input
-          type="file"
-          accept=".pdf"
-          onChange={handlePdfChange}
+            type="file"
+            accept=".pdf,image/*"
+            onChange={handlePdfChange}
           className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-none focus:border-pink file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-pink file:text-white file:cursor-pointer"
         />
       </div>

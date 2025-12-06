@@ -21,10 +21,10 @@ import { CSS } from "@dnd-kit/utilities";
 import Link from "next/link";
 import type { Certificate } from "@/types/certificate";
 
-// Construct full Supabase Storage URL from pdf filename
-function getPdfUrl(pdfPath: string): string {
+// Construct full Supabase Storage URL from stored filename
+function getFileUrl(filePath: string): string {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  return `${supabaseUrl}/storage/v1/object/public/certificates/${pdfPath}`;
+  return `${supabaseUrl}/storage/v1/object/public/certificates/${filePath}`;
 }
 
 interface SortableCertificateListProps {
@@ -78,16 +78,30 @@ function SortableRow({ certificate }: SortableRowProps) {
       </td>
       <td className="w-24 px-4 py-3">
         {certificate.pdf_path ? (
-          <a
-            href={getPdfUrl(certificate.pdf_path)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-pink hover:underline text-sm"
-          >
-            View PDF
-          </a>
+          (() => {
+            const path = certificate.pdf_path;
+            const isImage = !!path.match(/\.(jpg|jpeg|png|webp|gif|bmp|svg)$/i);
+            const url = getFileUrl(path);
+            if (isImage) {
+              return (
+                <a href={url} target="_blank" rel="noopener noreferrer">
+                  <img src={url} alt={certificate.title} className="w-24 h-auto rounded" />
+                </a>
+              );
+            }
+            return (
+              <a
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-pink hover:underline text-sm"
+              >
+                View
+              </a>
+            );
+          })()
         ) : (
-          <span className="text-white-1 text-sm">No PDF</span>
+          <span className="text-white-1 text-sm">No file</span>
         )}
       </td>
       <td className="w-32 px-4 py-3 text-right">
@@ -188,7 +202,7 @@ export default function SortableCertificateList({
                 Institution
               </th>
               <th className="w-24 px-4 py-3 text-left text-white-1 font-normal">
-                PDF
+                File
               </th>
               <th className="w-32 px-4 py-3 text-right text-white-1 font-normal">
                 Actions
