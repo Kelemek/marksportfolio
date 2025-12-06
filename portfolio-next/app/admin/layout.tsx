@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import DeployResumeButton from "@/components/admin/DeployResumeButton";
 
 export default async function AdminLayout({
   children,
@@ -66,6 +67,7 @@ export default async function AdminLayout({
             </a>
           </div>
           <div className="flex items-center gap-4">
+            <DeployResumeButton />
             <form action="/auth/signout" method="POST">
               <button
                 type="submit"
