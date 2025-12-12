@@ -7,11 +7,11 @@ import { Navigation, Footer } from "@/components";
 import type { Project } from "@/types/project";
 
 interface ProjectPageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
-// Create a client without cookies for static generation
-function createStaticClient() {
+// Create a public client for static generation (build time, no cookies available)
+function createPublicClient() {
   return createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -20,7 +20,7 @@ function createStaticClient() {
 
 // Generate static pages for all projects
 export async function generateStaticParams() {
-  const supabase = createStaticClient();
+  const supabase = createPublicClient();
   const { data: projects } = await supabase
     .from("projects")
     .select("slug")
@@ -33,11 +33,12 @@ export async function generateStaticParams() {
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }: ProjectPageProps) {
-  const supabase = createStaticClient();
+  const resolvedParams = await params;
+  const supabase = createPublicClient();
   const { data: project } = await supabase
     .from("projects")
     .select("*")
-    .eq("slug", params.slug)
+    .eq("slug", resolvedParams.slug)
     .eq("is_visible", true)
     .single();
 
@@ -52,11 +53,12 @@ export async function generateMetadata({ params }: ProjectPageProps) {
 }
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
-  const supabase = createStaticClient();
+  const resolvedParams = await params;
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("projects")
     .select("*")
-    .eq("slug", params.slug)
+    .eq("slug", resolvedParams.slug)
     .eq("is_visible", true)
     .single();
 
