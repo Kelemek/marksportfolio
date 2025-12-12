@@ -152,45 +152,45 @@ export default function SortableJobList({ initialJobs }: SortableJobListProps) {
           <span className="text-white">Saving...</span>
         </div>
       )}
-      <div className="bg-border-light rounded-lg overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-black/50">
-            <tr>
-              <th className="w-12 px-2 py-3 text-left text-white-1 font-normal">
-                <span className="sr-only">Drag</span>
-              </th>
-              <th className="px-4 py-3 text-left text-white-1 font-normal">
-                Title
-              </th>
-              <th className="px-4 py-3 text-left text-white-1 font-normal">
-                Company
-              </th>
-              <th className="w-36 px-4 py-3 text-left text-white-1 font-normal">
-                Period
-              </th>
-              <th className="w-32 px-4 py-3 text-right text-white-1 font-normal">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}
-          >
-            <SortableContext
-              items={jobs.map((j) => j.id)}
-              strategy={verticalListSortingStrategy}
-            >
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext
+          items={jobs.map((j) => j.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          <div className="bg-border-light rounded-lg overflow-hidden">
+            <table className="w-full">
+              <thead className="bg-black/50">
+                <tr>
+                  <th className="w-12 px-2 py-3 text-left text-white-1 font-normal">
+                    <span className="sr-only">Drag</span>
+                  </th>
+                  <th className="px-4 py-3 text-left text-white-1 font-normal">
+                    Title
+                  </th>
+                  <th className="px-4 py-3 text-left text-white-1 font-normal">
+                    Company
+                  </th>
+                  <th className="w-36 px-4 py-3 text-left text-white-1 font-normal">
+                    Period
+                  </th>
+                  <th className="w-32 px-4 py-3 text-right text-white-1 font-normal">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
               <tbody>
                 {jobs.map((job) => (
                   <SortableRow key={job.id} job={job} />
                 ))}
               </tbody>
-            </SortableContext>
-          </DndContext>
-        </table>
-      </div>
+            </table>
+          </div>
+        </SortableContext>
+      </DndContext>
     </div>
   );
 }

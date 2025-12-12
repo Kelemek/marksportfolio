@@ -154,42 +154,42 @@ export default function SortableSkillList({
           <span className="text-white">Saving...</span>
         </div>
       )}
-      <div className="bg-border-light rounded-lg overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-black/50">
-            <tr>
-              <th className="w-12 px-2 py-3 text-left text-white-1 font-normal">
-                <span className="sr-only">Drag</span>
-              </th>
-              <th className="px-4 py-3 text-left text-white-1 font-normal">
-                Name
-              </th>
-              <th className="w-32 px-4 py-3 text-left text-white-1 font-normal">
-                Years
-              </th>
-              <th className="w-32 px-4 py-3 text-right text-white-1 font-normal">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}
-          >
-            <SortableContext
-              items={skills.map((s) => s.id)}
-              strategy={verticalListSortingStrategy}
-            >
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext
+          items={skills.map((s) => s.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          <div className="bg-border-light rounded-lg overflow-hidden">
+            <table className="w-full">
+              <thead className="bg-black/50">
+                <tr>
+                  <th className="w-12 px-2 py-3 text-left text-white-1 font-normal">
+                    <span className="sr-only">Drag</span>
+                  </th>
+                  <th className="px-4 py-3 text-left text-white-1 font-normal">
+                    Name
+                  </th>
+                  <th className="w-32 px-4 py-3 text-left text-white-1 font-normal">
+                    Years
+                  </th>
+                  <th className="w-32 px-4 py-3 text-right text-white-1 font-normal">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
               <tbody>
                 {skills.map((skill) => (
                   <SortableRow key={skill.id} skill={skill} />
                 ))}
               </tbody>
-            </SortableContext>
-          </DndContext>
-        </table>
-      </div>
+            </table>
+          </div>
+        </SortableContext>
+      </DndContext>
     </div>
   );
 }
