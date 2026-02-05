@@ -1,0 +1,12 @@
+# Memory Notes for marksportfolio
+
+## Testing
+- **IMPORTANT**: Always run tests with `npm test -- --run` or configure to never use watch mode
+- Never run tests in watch mode by default
+- When running tests, use the `--run` flag to exit after completion
+- This prevents tests from hanging or keeping processes open
+
+## Project Configuration
+- Using Vitest for testing with React Testing Library
+- Test files are colocated with components using `.test.tsx` extension
+- All 50 component tests passing as of Feb 5, 2026
