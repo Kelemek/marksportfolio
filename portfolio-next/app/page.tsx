@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import {
-  Navigation,
+  ClientLayout,
   Header,
   ProjectCard,
   DrawingCard,
@@ -40,8 +40,7 @@ export default async function HomePage() {
   const { coding, drawing } = await getProjects();
 
   return (
-    <>
-      <Navigation />
+    <ClientLayout>
       <Header />
 
       <main role="main">
@@ -74,6 +73,6 @@ export default async function HomePage() {
 
       <ContactSection />
       <Footer />
-    </>
+    </ClientLayout>
   );
 }
