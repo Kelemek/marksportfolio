@@ -88,7 +88,7 @@ export default function SkillForm({ skill, mode }: SkillFormProps) {
           required
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-none focus:border-pink"
+          className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-hidden focus:border-pink"
           placeholder="e.g., JavaScript"
         />
       </div>
@@ -103,7 +103,7 @@ export default function SkillForm({ skill, mode }: SkillFormProps) {
           required
           value={formData.years}
           onChange={(e) => setFormData({ ...formData, years: e.target.value })}
-          className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-none focus:border-pink"
+          className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-hidden focus:border-pink"
           placeholder="e.g., 5+ years"
         />
       </div>
@@ -119,7 +119,7 @@ export default function SkillForm({ skill, mode }: SkillFormProps) {
             onChange={(e) =>
               setFormData({ ...formData, category: e.target.value as "systems" | "development" })
             }
-            className="w-full h-[50px] px-4 bg-border-light border border-border-light rounded-lg text-white focus:outline-none focus:border-pink appearance-none cursor-pointer"
+            className="w-full h-[50px] px-4 bg-border-light border border-border-light rounded-lg text-white focus:outline-hidden focus:border-pink appearance-none cursor-pointer"
           >
             <option value="development">Development</option>
             <option value="systems">Systems</option>

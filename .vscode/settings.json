@@ -1,0 +1,7 @@
+{
+  "css.validate": false,
+  "css.lint.unknownAtRules": "ignore",
+  "css.customData": [".vscode/tailwind-custom-data.json"],
+  "files.associations": {"*.css": "tailwindcss"},
+  "vitest.rootConfig": "portfolio-next/vitest.config.ts"
+}

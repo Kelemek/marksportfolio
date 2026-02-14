@@ -62,7 +62,7 @@ function SortableRow({ certificate }: SortableRowProps) {
         <button
           {...attributes}
           {...listeners}
-          className="cursor-grab active:cursor-grabbing p-2 hover:bg-white/10 rounded"
+          className="cursor-grab active:cursor-grabbing p-2 hover:bg-white/10 rounded-sm"
           title="Drag to reorder"
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
@@ -85,7 +85,7 @@ function SortableRow({ certificate }: SortableRowProps) {
             if (isImage) {
               return (
                 <a href={url} target="_blank" rel="noopener noreferrer">
-                  <img src={url} alt={certificate.title} className="w-24 h-auto rounded" />
+                  <img src={url} alt={certificate.title} className="w-24 h-auto rounded-sm" />
                 </a>
               );
             }

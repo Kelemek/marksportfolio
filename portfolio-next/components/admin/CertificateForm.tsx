@@ -151,7 +151,7 @@ export default function CertificateForm({
           required
           value={formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-          className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-none focus:border-pink"
+          className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-hidden focus:border-pink"
           placeholder="e.g., Bachelor of Science"
         />
       </div>
@@ -168,7 +168,7 @@ export default function CertificateForm({
           onChange={(e) =>
             setFormData({ ...formData, institution: e.target.value })
           }
-          className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-none focus:border-pink"
+          className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-hidden focus:border-pink"
           placeholder="e.g., University of Example"
         />
       </div>
@@ -184,7 +184,7 @@ export default function CertificateForm({
           onChange={(e) =>
             setFormData({ ...formData, aria_label: e.target.value })
           }
-          className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-none focus:border-pink"
+          className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-hidden focus:border-pink"
           placeholder="Accessible description for screen readers"
         />
       </div>
@@ -200,7 +200,7 @@ export default function CertificateForm({
             onChange={(e) =>
               setFormData({ ...formData, category: e.target.value as "education" | "scrimba" })
             }
-            className="w-full h-[50px] px-4 bg-border-light border border-border-light rounded-lg text-white focus:outline-none focus:border-pink appearance-none cursor-pointer"
+            className="w-full h-[50px] px-4 bg-border-light border border-border-light rounded-lg text-white focus:outline-hidden focus:border-pink appearance-none cursor-pointer"
           >
             <option value="education">Education</option>
             <option value="scrimba">Scrimba</option>
@@ -232,7 +232,7 @@ export default function CertificateForm({
             type="file"
             accept=".pdf,image/*"
             onChange={handlePdfChange}
-          className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-none focus:border-pink file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-pink file:text-white file:cursor-pointer"
+          className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-hidden focus:border-pink file:mr-4 file:py-2 file:px-4 file:rounded-sm file:border-0 file:bg-pink file:text-white file:cursor-pointer"
         />
       </div>
 

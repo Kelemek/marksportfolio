@@ -17,7 +17,7 @@ export default function ProjectCard({
   return (
     <article className="flex flex-col-reverse md:flex-row md:items-center mb-32 last:mb-0">
       {/* Text content */}
-      <div className="md:w-[30%] md:flex-shrink-0">
+      <div className="md:w-[30%] md:shrink-0">
         <h3 className="text-medium-1 mb-gutter-small">{project.title}</h3>
         {project.description && (
           <p className="mb-gutter-small">{project.description}</p>

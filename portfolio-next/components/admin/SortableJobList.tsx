@@ -55,7 +55,7 @@ function SortableRow({ job }: SortableRowProps) {
         <button
           {...attributes}
           {...listeners}
-          className="cursor-grab active:cursor-grabbing p-2 hover:bg-white/10 rounded"
+          className="cursor-grab active:cursor-grabbing p-2 hover:bg-white/10 rounded-sm"
           title="Drag to reorder"
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">

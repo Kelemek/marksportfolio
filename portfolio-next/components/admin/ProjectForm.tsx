@@ -138,7 +138,7 @@ export default function ProjectForm({ project, mode }: ProjectFormProps) {
             onChange={(e) =>
               setFormData({ ...formData, title: e.target.value })
             }
-            className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-none focus:border-pink"
+            className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-hidden focus:border-pink"
           />
         </div>
 
@@ -157,7 +157,7 @@ export default function ProjectForm({ project, mode }: ProjectFormProps) {
                 slug: e.target.value.toLowerCase().replace(/\s+/g, "-"),
               })
             }
-            className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-none focus:border-pink"
+            className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-hidden focus:border-pink"
             placeholder="my-project-name"
           />
         </div>
@@ -174,7 +174,7 @@ export default function ProjectForm({ project, mode }: ProjectFormProps) {
           onChange={(e) =>
             setFormData({ ...formData, description: e.target.value })
           }
-          className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-none focus:border-pink resize-none"
+          className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-hidden focus:border-pink resize-none"
         />
       </div>
 
@@ -189,7 +189,7 @@ export default function ProjectForm({ project, mode }: ProjectFormProps) {
           onChange={(e) =>
             setFormData({ ...formData, technologies: e.target.value })
           }
-          className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-none focus:border-pink"
+          className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-hidden focus:border-pink"
           placeholder="React, TypeScript, Tailwind CSS"
         />
       </div>
@@ -206,7 +206,7 @@ export default function ProjectForm({ project, mode }: ProjectFormProps) {
             onChange={(e) =>
               setFormData({ ...formData, site_url: e.target.value })
             }
-            className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-none focus:border-pink"
+            className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-hidden focus:border-pink"
             placeholder="https://example.com"
           />
         </div>
@@ -222,7 +222,7 @@ export default function ProjectForm({ project, mode }: ProjectFormProps) {
             onChange={(e) =>
               setFormData({ ...formData, github_url: e.target.value })
             }
-            className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-none focus:border-pink"
+            className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-hidden focus:border-pink"
             placeholder="https://github.com/user/repo"
           />
         </div>
@@ -242,7 +242,7 @@ export default function ProjectForm({ project, mode }: ProjectFormProps) {
             type="file"
             accept="image/*"
             onChange={handleImageChange}
-            className="flex-1 px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-none focus:border-pink file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-pink file:text-white file:cursor-pointer"
+            className="flex-1 px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-hidden focus:border-pink file:mr-4 file:py-2 file:px-4 file:rounded-sm file:border-0 file:bg-pink file:text-white file:cursor-pointer"
           />
         </div>
       </div>
@@ -258,7 +258,7 @@ export default function ProjectForm({ project, mode }: ProjectFormProps) {
           onChange={(e) =>
             setFormData({ ...formData, image_alt: e.target.value })
           }
-          className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-none focus:border-pink"
+          className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-hidden focus:border-pink"
           placeholder="Description of the image"
         />
       </div>
@@ -278,7 +278,7 @@ export default function ProjectForm({ project, mode }: ProjectFormProps) {
                   type: e.target.value as "coding" | "drawing",
                 })
               }
-              className="w-full h-[50px] px-4 bg-border-light border border-border-light rounded-lg text-white focus:outline-none focus:border-pink appearance-none cursor-pointer"
+              className="w-full h-[50px] px-4 bg-border-light border border-border-light rounded-lg text-white focus:outline-hidden focus:border-pink appearance-none cursor-pointer"
             >
               <option value="coding">Coding</option>
               <option value="drawing">Drawing</option>
@@ -307,7 +307,7 @@ export default function ProjectForm({ project, mode }: ProjectFormProps) {
                   display_order: parseInt(e.target.value) || 0,
                 })
               }
-              className="w-full h-[50px] px-4 pr-10 bg-border-light border border-border-light rounded-lg text-white focus:outline-none focus:border-pink [&::-webkit-inner-spin-button]:opacity-0 [&::-webkit-outer-spin-button]:opacity-0"
+              className="w-full h-[50px] px-4 pr-10 bg-border-light border border-border-light rounded-lg text-white focus:outline-hidden focus:border-pink [&::-webkit-inner-spin-button]:opacity-0 [&::-webkit-outer-spin-button]:opacity-0"
             />
             <div className="absolute inset-y-0 right-0 flex flex-col justify-center pr-3 gap-1">
               <button
@@ -340,7 +340,7 @@ export default function ProjectForm({ project, mode }: ProjectFormProps) {
               onChange={(e) =>
                 setFormData({ ...formData, is_visible: e.target.checked })
               }
-              className="w-5 h-5 rounded border-border-light bg-border-light text-pink focus:ring-pink"
+              className="w-5 h-5 rounded-sm border-border-light bg-border-light text-pink focus:ring-pink"
             />
             <span className="text-white">Visible</span>
           </label>

@@ -19,7 +19,7 @@ export default function AboutSection() {
           </div>
 
           {/* Text */}
-          <div className="md:w-[48%] md:flex-shrink-0">
+          <div className="md:w-[48%] md:shrink-0">
             <p className="mb-gutter-small">
               I am a systems engineer with over 29 years of experience who has
               transitioned into coding. I am currently located in Cambridge,

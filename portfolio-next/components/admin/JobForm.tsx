@@ -138,7 +138,7 @@ export default function JobForm({ job, mode }: JobFormProps) {
             onChange={(e) =>
               setFormData({ ...formData, title: e.target.value })
             }
-            className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-none focus:border-pink"
+            className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-hidden focus:border-pink"
             placeholder="e.g., Senior Developer"
           />
         </div>
@@ -155,7 +155,7 @@ export default function JobForm({ job, mode }: JobFormProps) {
             onChange={(e) =>
               setFormData({ ...formData, company: e.target.value })
             }
-            className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-none focus:border-pink"
+            className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-hidden focus:border-pink"
             placeholder="e.g., Acme Corp"
           />
         </div>
@@ -174,7 +174,7 @@ export default function JobForm({ job, mode }: JobFormProps) {
             onChange={(e) =>
               setFormData({ ...formData, location: e.target.value })
             }
-            className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-none focus:border-pink"
+            className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-hidden focus:border-pink"
             placeholder="e.g., New York, NY"
           />
         </div>
@@ -191,7 +191,7 @@ export default function JobForm({ job, mode }: JobFormProps) {
             onChange={(e) =>
               setFormData({ ...formData, period: e.target.value })
             }
-            className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-none focus:border-pink"
+            className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-hidden focus:border-pink"
             placeholder="e.g., 2020 - Present"
           />
         </div>
@@ -207,7 +207,7 @@ export default function JobForm({ job, mode }: JobFormProps) {
                 type="text"
                 value={achievement}
                 onChange={(e) => updateAchievement(index, e.target.value)}
-                className="flex-1 px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-none focus:border-pink"
+                className="flex-1 px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-hidden focus:border-pink"
                 placeholder="Enter an achievement..."
               />
               <button
@@ -239,7 +239,7 @@ export default function JobForm({ job, mode }: JobFormProps) {
                 type="text"
                 value={responsibility}
                 onChange={(e) => updateResponsibility(index, e.target.value)}
-                className="flex-1 px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-none focus:border-pink"
+                className="flex-1 px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-hidden focus:border-pink"
                 placeholder="Enter a responsibility..."
               />
               <button

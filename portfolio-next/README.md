@@ -1,24 +1,164 @@
 # Mark's Portfolio - Next.js
 
-A modern portfolio website built with Next.js 14, TypeScript, Tailwind CSS, and Supabase.
+A modern portfolio website built with Next.js 16, TypeScript, Tailwind CSS v4, and Supabase.
 
 ## Features
 
-- **Public Portfolio**: Server-side rendered portfolio with ISR (Incremental Static Regeneration)
-- **Admin Dashboard**: Protected admin interface to manage projects
-- **Magic Link Auth**: Passwordless authentication via Supabase Auth
-- **Image Storage**: Upload and manage images via Supabase Storage
+### Public Site
+
+- **Coding & Drawing Projects**: Server-rendered project showcases with ISR (Incremental Static Regeneration, 60s revalidate)
+- **About Section**: Bio and self-portrait
+- **Contact Section**: Email and social links
+- **Project Detail Pages**: Individual project pages at `/projects/[slug]`
 - **Responsive Design**: Mobile-first design with Tailwind CSS
+
+### Admin Dashboard
+
+Protected admin interface at `/admin` for managing all site content:
+
+| Section | Path | Description |
+|---------|------|-------------|
+| **Projects** | `/admin` | CRUD for coding and drawing projects; drag-and-drop reorder; visibility toggle |
+| **Skills** | `/admin/skills` | Manage skills by category (systems, development); drag-and-drop reorder |
+| **Certificates** | `/admin/certificates` | CRUD for education and Scrimba certificates; PDF uploads |
+| **Jobs** | `/admin/jobs` | Work experience entries with achievements and responsibilities; drag-and-drop reorder |
+| **Settings** | `/admin/settings` | Key-value settings (e.g., resume URL, contact info) |
+
+**Admin Tools:**
+
+- **Deploy Resume**: Triggers Vercel deploy hook to rebuild resume sub-project
+- **Magic Link Auth**: Passwordless login via Supabase Auth
+
+---
 
 ## Tech Stack
 
-- **Framework**: Next.js 14 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Database**: Supabase (PostgreSQL)
-- **Auth**: Supabase Auth (Magic Link)
-- **Storage**: Supabase Storage
-- **Deployment**: Vercel
+### Core
+
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| **Next.js** | 16 | App Router, server components, API routes |
+| **React** | 19 | UI framework |
+| **TypeScript** | 5.9 | Type safety |
+| **Tailwind CSS** | 4.1 | Styling (CSS-first config with `@theme`) |
+
+### Backend & Data
+
+| Technology | Purpose |
+|------------|---------|
+| **Supabase** | PostgreSQL database, Auth (Magic Link), Storage |
+| **@supabase/ssr** | Server-side auth with cookie handling |
+
+### UI & Interaction
+
+| Package | Purpose |
+|---------|---------|
+| **@dnd-kit/core** | Drag-and-drop foundation |
+| **@dnd-kit/sortable** | Sortable lists for admin reordering |
+
+### Analytics & Monitoring
+
+| Tool | Purpose |
+|------|---------|
+| **@vercel/analytics** | Web analytics |
+| **@vercel/speed-insights** | Performance monitoring |
+| **Clarity** | Microsoft Clarity session recording (optional, via `NEXT_PUBLIC_CLARITY_ID`) |
+
+### Testing
+
+| Tool | Purpose |
+|------|---------|
+| **Vitest** | Test runner |
+| **@testing-library/react** | Component testing |
+| **happy-dom** | DOM environment for tests |
+| **@vitest/coverage-v8** | Coverage reporting |
+
+### Build & Tooling
+
+| Tool | Purpose |
+|------|---------|
+| **ESLint** | Linting (eslint-config-next) |
+| **PostCSS** | CSS processing (@tailwindcss/postcss) |
+
+---
+
+## Project Structure
+
+```
+portfolio-next/
+├── app/
+│   ├── admin/                    # Admin dashboard
+│   │   ├── projects/             # Project CRUD (new, [id]/edit)
+│   │   ├── skills/               # Skills CRUD
+│   │   ├── certificates/         # Certificates CRUD
+│   │   ├── jobs/                 # Jobs CRUD
+│   │   ├── settings/             # Settings CRUD
+│   │   └── layout.tsx            # Admin layout + nav
+│   ├── api/                      # API routes
+│   │   ├── revalidate/           # ISR revalidation
+│   │   ├── deploy-resume/        # Vercel deploy hook trigger
+│   │   ├── projects/             # delete, reorder, visibility
+│   │   ├── skills/               # delete, reorder
+│   │   ├── certificates/         # delete, reorder
+│   │   ├── jobs/                 # delete, reorder
+│   │   └── settings/             # delete
+│   ├── auth/callback/            # Magic link callback
+│   ├── auth/signout/             # Sign out handler
+│   ├── login/                    # Login page
+│   ├── projects/[slug]/          # Project detail page
+│   └── page.tsx                  # Home page
+├── components/
+│   ├── admin/                    # Admin forms & clients
+│   │   ├── ProjectForm.tsx
+│   │   ├── CertificateForm.tsx
+│   │   ├── SkillForm.tsx
+│   │   ├── JobForm.tsx
+│   │   ├── SettingsForm.tsx
+│   │   ├── DeployResumeButton.tsx
+│   │   └── ...sortable lists
+│   ├── AboutSection.tsx
+│   ├── ContactSection.tsx
+│   ├── ClientLayout.tsx
+│   ├── DrawingCard.tsx
+│   ├── Footer.tsx
+│   ├── Header.tsx
+│   ├── Navigation.tsx
+│   ├── ProjectCard.tsx
+│   └── ClarityScript.tsx
+├── lib/supabase/
+│   ├── client.ts                 # Browser Supabase client
+│   └── server.ts                 # Server Supabase client
+├── types/                        # TypeScript interfaces
+│   ├── project.ts
+│   ├── job.ts
+│   ├── certificate.ts
+│   ├── skill.ts
+│   └── settings.ts
+├── supabase/
+│   └── schema.sql                # Database schema + seed
+├── middleware.ts                 # Auth middleware (protects /admin)
+├── vitest.config.ts
+└── postcss.config.mjs
+```
+
+---
+
+## Database & Storage
+
+### Supabase Tables
+
+- **projects** – Coding and drawing projects (slug, title, description, technologies, type, display_order, is_visible, etc.)
+- **skills** – Skills by category (systems, development)
+- **certificates** – Education and Scrimba certificates with PDF paths
+- **jobs** – Work experience with achievements and responsibilities
+- **settings** – Key-value configuration
+
+### Storage Buckets
+
+- **images** – Project images (Supabase Storage)
+- **certificates** – Certificate PDFs (Supabase Storage)
+
+---
 
 ## Getting Started
 
@@ -31,20 +171,20 @@ npm install
 
 ### 2. Set Up Supabase
 
-1. Create a new project at [supabase.com](https://supabase.com)
-2. Go to SQL Editor and run the schema from `supabase/schema.sql`
-3. Enable Email Auth in Authentication > Providers
-4. Configure Magic Link in Authentication > Email Templates
+1. Create a project at [supabase.com](https://supabase.com)
+2. Run the schema from `supabase/schema.sql` in the SQL Editor
+3. Create storage buckets `images` and `certificates` (public)
+4. Enable Email Auth and Magic Link in Authentication > Providers
 
-### 3. Configure Environment Variables
+### 3. Environment Variables
 
-Copy `.env.local.example` to `.env.local` and fill in your Supabase credentials:
+Copy `.env.local.example` to `.env.local`:
 
 ```bash
 cp .env.local.example .env.local
 ```
 
-Edit `.env.local`:
+Required:
 
 ```
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
@@ -52,14 +192,21 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 ADMIN_EMAIL=your-email@example.com
 ```
 
-### 4. Configure Supabase Auth Redirect URLs
+Optional:
 
-In your Supabase dashboard, go to Authentication > URL Configuration and add:
+```
+NEXT_PUBLIC_CLARITY_ID=         # Microsoft Clarity project ID
+VERCEL_DEPLOY_HOOK_RESUME=      # Vercel deploy hook URL for resume rebuild
+```
 
-- Site URL: `http://localhost:3000` (for development)
+### 4. Supabase Auth Redirect URLs
+
+In Authentication > URL Configuration, add:
+
+- Site URL: `http://localhost:3000` (dev) or your production URL
 - Redirect URLs:
   - `http://localhost:3000/auth/callback`
-  - `https://your-domain.vercel.app/auth/callback` (for production)
+  - `https://your-domain.vercel.app/auth/callback`
 
 ### 5. Run Development Server
 
@@ -67,92 +214,44 @@ In your Supabase dashboard, go to Authentication > URL Configuration and add:
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to see the portfolio.
+Open [http://localhost:3000](http://localhost:3000).
 
-## Project Structure
+---
 
-```
-portfolio-next/
-├── app/
-│   ├── admin/              # Admin dashboard pages
-│   │   ├── projects/       # Project CRUD pages
-│   │   ├── layout.tsx      # Admin layout with nav
-│   │   └── page.tsx        # Admin dashboard
-│   ├── api/
-│   │   └── revalidate/     # ISR revalidation endpoint
-│   ├── auth/
-│   │   ├── callback/       # Magic link callback
-│   │   └── signout/        # Sign out handler
-│   ├── login/              # Login page
-│   ├── globals.css         # Global styles
-│   ├── layout.tsx          # Root layout
-│   └── page.tsx            # Home page
-├── components/
-│   ├── admin/
-│   │   └── ProjectForm.tsx # Project create/edit form
-│   ├── AboutSection.tsx
-│   ├── ContactSection.tsx
-│   ├── DrawingCard.tsx
-│   ├── Footer.tsx
-│   ├── Header.tsx
-│   ├── Navigation.tsx
-│   └── ProjectCard.tsx
-├── lib/
-│   └── supabase/
-│       ├── client.ts       # Browser Supabase client
-│       └── server.ts       # Server Supabase client
-├── public/
-│   ├── fonts/              # Custom fonts
-│   └── images/             # Static images
-├── supabase/
-│   └── schema.sql          # Database schema + seed data
-├── types/
-│   └── project.ts          # TypeScript types
-├── middleware.ts           # Auth middleware
-└── ...config files
-```
+## Scripts
 
-## Deployment to Vercel
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start dev server |
+| `npm run build` | Production build |
+| `npm run start` | Start production server |
+| `npm run lint` | Run ESLint |
+| `npm run test` | Run Vitest |
+| `npm run test:ui` | Vitest UI |
+| `npm run test:coverage` | Coverage report |
 
-### 1. Push to GitHub
-
-```bash
-git add .
-git commit -m "Initial Next.js portfolio"
-git push
-```
-
-### 2. Deploy to Vercel
-
-1. Go to [vercel.com](https://vercel.com) and import your repository
-2. Set the root directory to `portfolio-next`
-3. Add environment variables:
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - `ADMIN_EMAIL`
-4. Deploy!
-
-### 3. Update Supabase Redirect URLs
-
-After deployment, add your Vercel URL to Supabase Auth redirect URLs:
-- `https://your-project.vercel.app/auth/callback`
+---
 
 ## Admin Usage
 
 1. Go to `/login`
 2. Enter your admin email (must match `ADMIN_EMAIL`)
-3. Check your email for the magic link
-4. Click the link to access `/admin`
-5. Add, edit, or delete projects
-6. Changes are automatically reflected on the public site via ISR
+3. Click the magic link in your email
+4. You’ll be redirected to `/admin`
+5. Manage Projects, Skills, Certificates, Jobs, and Settings
+6. Changes are reflected on the public site via ISR (revalidate API)
 
-## Uploading Images
+---
 
-After setting up Supabase Storage:
+## Deployment (Vercel)
 
-1. Upload existing images to the `images` bucket in Supabase dashboard
-2. Update project `image_url` fields with the public URLs
-3. Or use the admin form to upload images directly
+1. Push the repo to GitHub
+2. Import the project in [vercel.com](https://vercel.com)
+3. Set root directory to `portfolio-next`
+4. Add environment variables: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `ADMIN_EMAIL`
+5. Add your Vercel URL to Supabase Auth redirect URLs
+
+---
 
 ## License
 

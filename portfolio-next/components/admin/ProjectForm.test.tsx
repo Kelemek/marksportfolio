@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import ProjectForm from './ProjectForm';
 import { Project } from '@/types/project';
@@ -12,20 +12,36 @@ vi.mock('next/navigation', () => ({
   useRouter: () => mockRouter,
 }));
 
-// Mock Supabase client
+// Mock Supabase storage
+const mockStorageUpload = vi.fn().mockResolvedValue({ error: null });
+const mockGetPublicUrl = vi.fn(() => ({ data: { publicUrl: 'https://example.com/uploaded.jpg' } }));
 const mockSupabaseClient = {
   from: vi.fn(() => ({
     insert: vi.fn().mockResolvedValue({ data: {}, error: null }),
-    update: vi.fn().mockResolvedValue({ data: {}, error: null }),
+    update: vi.fn().mockReturnValue({
+      eq: vi.fn().mockResolvedValue({ data: {}, error: null }),
+    }),
     select: vi.fn().mockReturnValue({
       eq: vi.fn().mockResolvedValue({ data: [], error: null }),
     }),
   })),
+  storage: {
+    from: vi.fn(() => ({
+      upload: mockStorageUpload,
+      getPublicUrl: mockGetPublicUrl,
+    })),
+  },
 };
 vi.mock('@/lib/supabase/client', () => ({
   createClient: () => mockSupabaseClient,
   getSupabaseClient: () => mockSupabaseClient,
 }));
+
+// Mock URL.createObjectURL
+vi.stubGlobal('URL', {
+  ...URL,
+  createObjectURL: vi.fn(() => 'blob:mock-url'),
+});
 
 // Mock fetch for revalidate API
 global.fetch = vi.fn().mockResolvedValue({ ok: true });
@@ -53,6 +69,7 @@ describe('ProjectForm', () => {
     global.fetch = vi.fn().mockResolvedValue({ ok: true });
     mockRouter.push.mockClear();
     mockRouter.refresh.mockClear();
+    mockStorageUpload.mockResolvedValue({ error: null });
   });
 
   describe('Create Mode', () => {
@@ -207,12 +224,31 @@ describe('ProjectForm', () => {
 
   describe('Form Submit - Edit Mode', () => {
     it('calls supabase update on form submission in edit mode', async () => {
+      const mockEq = vi.fn().mockResolvedValue({ data: {}, error: null });
+      const mockUpdate = vi.fn().mockReturnValue({ eq: mockEq });
+      mockSupabaseClient.from.mockImplementationOnce(() => ({
+        insert: vi.fn(),
+        update: mockUpdate,
+        select: vi.fn(),
+      }));
+
       render(<ProjectForm project={mockProject} mode="edit" />);
       fireEvent.change(screen.getByLabelText('Title *'), { target: { value: 'Updated Title' } });
       fireEvent.click(screen.getByText('Update Project'));
 
-      await new Promise(resolve => setTimeout(resolve, 100));
-      expect(mockSupabaseClient.from).toHaveBeenCalledWith('projects');
+      await waitFor(() => {
+        expect(mockUpdate).toHaveBeenCalled();
+        expect(mockEq).toHaveBeenCalledWith('id', mockProject.id);
+      });
+    });
+
+    it('navigates to admin on successful edit', async () => {
+      render(<ProjectForm project={mockProject} mode="edit" />);
+      fireEvent.click(screen.getByText('Update Project'));
+
+      await waitFor(() => {
+        expect(mockRouter.push).toHaveBeenCalledWith('/admin');
+      });
     });
 
     it('preserves all fields when updating', async () => {
@@ -310,6 +346,13 @@ describe('ProjectForm', () => {
       fireEvent.change(orderInput, { target: { value: '5' } });
       expect(orderInput.value).toBe('5');
     });
+
+    it('handles invalid display order as zero', () => {
+      render(<ProjectForm mode="create" />);
+      const orderInput = screen.getByLabelText('Display Order') as HTMLInputElement;
+      fireEvent.change(orderInput, { target: { value: 'abc' } });
+      expect(orderInput.value).toBe('0');
+    });
   });
 
   describe('Display Order Buttons', () => {
@@ -317,27 +360,140 @@ describe('ProjectForm', () => {
       render(<ProjectForm mode="create" />);
       const orderInput = screen.getByLabelText('Display Order') as HTMLInputElement;
       expect(orderInput.value).toBe('0');
-      
-      // Find and click the up button
-      const upButtons = document.querySelectorAll('button[type="button"]');
-      const incrementButton = Array.from(upButtons).find((btn) => {
-        const svg = btn.querySelector('svg');
-        return svg && svg.getAttribute('viewBox') === '0 0 24 24' && btn.className.includes('text-white');
-      });
-      
-      if (incrementButton) {
-        fireEvent.click(incrementButton);
-        expect(orderInput.value).toBe('1');
-      }
+
+      const stepperButtons = document.querySelectorAll('button[type="button"]');
+      const incrementButton = stepperButtons[0];
+      fireEvent.click(incrementButton);
+      expect(orderInput.value).toBe('1');
     });
 
     it('decrements display order with down button', () => {
       render(<ProjectForm mode="create" />);
       fireEvent.change(screen.getByLabelText('Display Order'), { target: { value: '5' } });
-      
-      // Decrement button should decrease value
       const orderInput = screen.getByLabelText('Display Order') as HTMLInputElement;
-      expect(orderInput.value).toBe('5');
+
+      const stepperButtons = document.querySelectorAll('button[type="button"]');
+      const decrementButton = stepperButtons[1];
+      fireEvent.click(decrementButton);
+      expect(orderInput.value).toBe('4');
+    });
+
+    it('decrement button does not go below zero', () => {
+      render(<ProjectForm mode="create" />);
+      const orderInput = screen.getByLabelText('Display Order') as HTMLInputElement;
+      const stepperButtons = document.querySelectorAll('button[type="button"]');
+      const decrementButton = stepperButtons[1];
+      fireEvent.click(decrementButton);
+      expect(orderInput.value).toBe('0');
+    });
+  });
+
+  describe('Image Upload', () => {
+    it('handles file input change with no file selected', () => {
+      render(<ProjectForm mode="create" />);
+      const fileInput = document.querySelector('input[type="file"]')!;
+      fireEvent.change(fileInput, { target: { files: [] } });
+      expect(document.querySelector('img[alt="Preview"]')).not.toBeInTheDocument();
+    });
+
+    it('handles image file selection and shows preview', () => {
+      render(<ProjectForm mode="create" />);
+      const fileInput = document.querySelector('input[type="file"]')!;
+      const file = new File(['image content'], 'test.png', { type: 'image/png' });
+
+      fireEvent.change(fileInput, { target: { files: [file] } });
+
+      const preview = document.querySelector('img[alt="Preview"]');
+      expect(preview).toBeInTheDocument();
+    });
+
+    it('uploads image and includes in submission when new image selected', async () => {
+      render(<ProjectForm mode="create" />);
+      fireEvent.change(screen.getByLabelText('Title *'), { target: { value: 'New Project' } });
+      fireEvent.change(screen.getByLabelText('Slug *'), { target: { value: 'new-project' } });
+
+      const fileInput = document.querySelector('input[type="file"]')!;
+      const file = new File(['image content'], 'test.png', { type: 'image/png' });
+      fireEvent.change(fileInput, { target: { files: [file] } });
+
+      fireEvent.click(screen.getByText('Create Project'));
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      expect(mockStorageUpload).toHaveBeenCalled();
+      expect(mockGetPublicUrl).toHaveBeenCalled();
+    });
+
+    it('displays error when image upload fails', async () => {
+      mockStorageUpload.mockResolvedValueOnce({ error: { message: 'Storage quota exceeded' } });
+
+      render(<ProjectForm mode="create" />);
+      fireEvent.change(screen.getByLabelText('Title *'), { target: { value: 'New Project' } });
+      fireEvent.change(screen.getByLabelText('Slug *'), { target: { value: 'new-project' } });
+
+      const fileInput = document.querySelector('input[type="file"]')!;
+      const file = new File(['image content'], 'test.png', { type: 'image/png' });
+      fireEvent.change(fileInput, { target: { files: [file] } });
+
+      fireEvent.click(screen.getByText('Create Project'));
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      expect(screen.getByText(/Image upload failed/)).toBeInTheDocument();
+    });
+  });
+
+  describe('Error Handling', () => {
+    it('displays error when supabase insert fails', async () => {
+      const mockInsert = vi.fn().mockRejectedValue(new Error('Insert failed'));
+      mockSupabaseClient.from.mockReturnValueOnce({
+        insert: mockInsert,
+      });
+
+      render(<ProjectForm mode="create" />);
+      fireEvent.change(screen.getByLabelText('Title *'), { target: { value: 'New Project' } });
+      fireEvent.change(screen.getByLabelText('Slug *'), { target: { value: 'new-project' } });
+      fireEvent.click(screen.getByText('Create Project'));
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      expect(screen.getByText(/Insert failed/)).toBeInTheDocument();
+    });
+
+    it('displays error when supabase update fails', async () => {
+      const mockUpdate = vi.fn().mockReturnValue({
+        eq: vi.fn().mockRejectedValue(new Error('Update failed')),
+      });
+      mockSupabaseClient.from.mockReturnValueOnce({
+        update: mockUpdate,
+      });
+
+      render(<ProjectForm project={mockProject} mode="edit" />);
+      fireEvent.change(screen.getByLabelText('Title *'), { target: { value: 'Updated Title' } });
+      fireEvent.click(screen.getByText('Update Project'));
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      expect(screen.getByText(/Update failed/)).toBeInTheDocument();
+    });
+
+    it('displays generic error for non-Error throws', async () => {
+      mockSupabaseClient.from.mockReturnValueOnce({
+        insert: vi.fn().mockRejectedValue('Unknown error'),
+      });
+
+      render(<ProjectForm mode="create" />);
+      fireEvent.change(screen.getByLabelText('Title *'), { target: { value: 'New Project' } });
+      fireEvent.change(screen.getByLabelText('Slug *'), { target: { value: 'new-project' } });
+      fireEvent.click(screen.getByText('Create Project'));
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      expect(screen.getByText(/An error occurred/)).toBeInTheDocument();
+    });
+  });
+
+  describe('Slug Transformation', () => {
+    it('transforms slug to lowercase and replaces spaces with dashes', () => {
+      render(<ProjectForm mode="create" />);
+      const slugInput = screen.getByLabelText('Slug *') as HTMLInputElement;
+      fireEvent.change(slugInput, { target: { value: 'My Project Name' } });
+      expect(slugInput.value).toBe('my-project-name');
     });
   });
 

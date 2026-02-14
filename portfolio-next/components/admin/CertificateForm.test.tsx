@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { vi } from 'vitest';
 import CertificateForm from './CertificateForm';
 import type { Certificate } from '@/types/certificate';
@@ -8,6 +8,7 @@ const mockRouter = {
   refresh: vi.fn(),
 };
 
+const mockStorageUpload = vi.fn().mockResolvedValue({ error: null });
 const mockSupabaseClient = {
   from: vi.fn(() => ({
     select: vi.fn(() => ({
@@ -26,7 +27,7 @@ const mockSupabaseClient = {
   })),
   storage: {
     from: vi.fn(() => ({
-      upload: vi.fn().mockResolvedValue({ error: null }),
+      upload: mockStorageUpload,
     })),
   },
 };
@@ -44,6 +45,8 @@ global.fetch = vi.fn().mockResolvedValue({ ok: true });
 describe('CertificateForm Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    global.fetch = vi.fn().mockResolvedValue({ ok: true });
+    mockStorageUpload.mockResolvedValue({ error: null });
   });
 
   describe('Create Mode', () => {
@@ -273,12 +276,22 @@ describe('CertificateForm Component', () => {
     };
 
     it('calls supabase update on form submission in edit mode', async () => {
+      const mockEq = vi.fn().mockResolvedValue({ error: null });
+      const mockUpdate = vi.fn().mockReturnValue({ eq: mockEq });
+      mockSupabaseClient.from.mockImplementationOnce(() => ({
+        select: vi.fn(),
+        insert: vi.fn(),
+        update: mockUpdate,
+      }));
+
       render(<CertificateForm certificate={mockCertificate} mode="edit" />);
       fireEvent.change(screen.getByLabelText('Title *'), { target: { value: 'Master of Science' } });
       fireEvent.click(screen.getByText('Update Certificate'));
 
-      await new Promise(resolve => setTimeout(resolve, 100));
-      expect(mockSupabaseClient.from).toHaveBeenCalledWith('certificates');
+      await waitFor(() => {
+        expect(mockUpdate).toHaveBeenCalled();
+        expect(mockEq).toHaveBeenCalledWith('id', mockCertificate.id);
+      });
     });
 
     it('navigates to certificates page on successful edit submission', async () => {
@@ -292,6 +305,76 @@ describe('CertificateForm Component', () => {
   });
 
   describe('PDF File Handling', () => {
+    it('handles PDF file selection', () => {
+      render(<CertificateForm mode="create" />);
+      const fileInput = document.querySelector('input[type="file"]')!;
+      const file = new File(['pdf content'], 'cert.pdf', { type: 'application/pdf' });
+      fireEvent.change(fileInput, { target: { files: [file] } });
+      // File is stored in state - submit would use it
+      fireEvent.change(screen.getByLabelText('Title *'), { target: { value: 'B.S.' } });
+      fireEvent.change(screen.getByLabelText('Institution *'), { target: { value: 'University' } });
+      fireEvent.click(screen.getByText('Create Certificate'));
+      // If we get here without error, handlePdfChange worked
+      expect(mockStorageUpload).toHaveBeenCalled();
+    });
+
+    it('handles file input change with no file selected', () => {
+      render(<CertificateForm mode="create" />);
+      const fileInput = document.querySelector('input[type="file"]')!;
+      fireEvent.change(fileInput, { target: { files: [] } });
+      expect(screen.getByText('Create Certificate')).toBeInTheDocument();
+    });
+
+    it('uploads PDF when file selected on create', async () => {
+      render(<CertificateForm mode="create" />);
+      fireEvent.change(screen.getByLabelText('Title *'), { target: { value: 'B.S. Degree' } });
+      fireEvent.change(screen.getByLabelText('Institution *'), { target: { value: 'University' } });
+      const fileInput = document.querySelector('input[type="file"]')!;
+      const file = new File(['pdf'], 'cert.pdf', { type: 'application/pdf' });
+      fireEvent.change(fileInput, { target: { files: [file] } });
+      fireEvent.click(screen.getByText('Create Certificate'));
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      expect(mockStorageUpload).toHaveBeenCalledWith(
+        expect.stringMatching(/B\.S\._Degree-\d+\.pdf/),
+        expect.any(File),
+        expect.objectContaining({ contentType: 'application/pdf', upsert: true })
+      );
+      expect(mockRouter.push).toHaveBeenCalledWith('/admin/certificates');
+    });
+
+    it('uses octet-stream when file has no type and extension is not pdf', async () => {
+      render(<CertificateForm mode="create" />);
+      fireEvent.change(screen.getByLabelText('Title *'), { target: { value: 'Cert' } });
+      fireEvent.change(screen.getByLabelText('Institution *'), { target: { value: 'University' } });
+      const fileInput = document.querySelector('input[type="file"]')!;
+      const file = new File(['content'], 'doc.xyz', { type: '' });
+      fireEvent.change(fileInput, { target: { files: [file] } });
+      fireEvent.click(screen.getByText('Create Certificate'));
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      expect(mockStorageUpload).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.any(File),
+        expect.objectContaining({ contentType: 'application/octet-stream', upsert: true })
+      );
+    });
+
+    it('displays error when PDF upload fails', async () => {
+      mockStorageUpload.mockResolvedValueOnce({ error: { message: 'Storage full' } });
+
+      render(<CertificateForm mode="create" />);
+      fireEvent.change(screen.getByLabelText('Title *'), { target: { value: 'B.S.' } });
+      fireEvent.change(screen.getByLabelText('Institution *'), { target: { value: 'University' } });
+      const fileInput = document.querySelector('input[type="file"]')!;
+      const file = new File(['pdf'], 'cert.pdf', { type: 'application/pdf' });
+      fireEvent.change(fileInput, { target: { files: [file] } });
+      fireEvent.click(screen.getByText('Create Certificate'));
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      expect(screen.getByText(/PDF upload failed/)).toBeInTheDocument();
+    });
+
     it('renders PDF file input with correct accept type', () => {
       render(<CertificateForm mode="create" />);
       const fileInputs = document.querySelectorAll('input[type="file"]');
@@ -437,6 +520,70 @@ describe('CertificateForm Component', () => {
   });
 
   describe('Error Handling', () => {
+    it('displays error message when insert fails', async () => {
+      const selectChain = {
+        eq: vi.fn(() => ({
+          order: vi.fn(() => ({
+            limit: vi.fn(() => ({
+              single: vi.fn().mockResolvedValue({ data: { sort_order: 1 } }),
+            })),
+          })),
+        })),
+      };
+      const mockInsert = vi.fn().mockRejectedValue(new Error('Insert failed'));
+      mockSupabaseClient.from
+        .mockReturnValueOnce({
+          select: vi.fn(() => selectChain),
+          insert: vi.fn(),
+          update: vi.fn(),
+        })
+        .mockReturnValueOnce({
+          select: vi.fn(),
+          insert: mockInsert,
+          update: vi.fn(),
+        });
+
+      render(<CertificateForm mode="create" />);
+      fireEvent.change(screen.getByLabelText('Title *'), { target: { value: 'B.S.' } });
+      fireEvent.change(screen.getByLabelText('Institution *'), { target: { value: 'University' } });
+      fireEvent.click(screen.getByText('Create Certificate'));
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      expect(screen.getByText(/Insert failed/)).toBeInTheDocument();
+    });
+
+    it('displays generic error for non-Error throws', async () => {
+      const selectChain = {
+        eq: vi.fn(() => ({
+          order: vi.fn(() => ({
+            limit: vi.fn(() => ({
+              single: vi.fn().mockResolvedValue({ data: { sort_order: 1 } }),
+            })),
+          })),
+        })),
+      };
+      const mockInsert = vi.fn().mockRejectedValue('Unknown error');
+      mockSupabaseClient.from
+        .mockReturnValueOnce({
+          select: vi.fn(() => selectChain),
+          insert: vi.fn(),
+          update: vi.fn(),
+        })
+        .mockReturnValueOnce({
+          select: vi.fn(),
+          insert: mockInsert,
+          update: vi.fn(),
+        });
+
+      render(<CertificateForm mode="create" />);
+      fireEvent.change(screen.getByLabelText('Title *'), { target: { value: 'B.S.' } });
+      fireEvent.change(screen.getByLabelText('Institution *'), { target: { value: 'University' } });
+      fireEvent.click(screen.getByText('Create Certificate'));
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      expect(screen.getByText(/An error occurred/)).toBeInTheDocument();
+    });
+
     it('displays error message when update fails', async () => {
       const mockCertificate: Certificate = {
         id: '1',

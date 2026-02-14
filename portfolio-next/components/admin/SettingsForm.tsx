@@ -74,7 +74,7 @@ export default function SettingsForm({ setting, mode }: SettingsFormProps) {
           required
           value={formData.key}
           onChange={(e) => setFormData({ ...formData, key: e.target.value })}
-          className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-none focus:border-pink"
+          className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-hidden focus:border-pink"
           placeholder="e.g., site_title"
           disabled={mode === "edit"} // Key should not be changed in edit mode
         />
@@ -95,7 +95,7 @@ export default function SettingsForm({ setting, mode }: SettingsFormProps) {
           rows={4}
           value={formData.value}
           onChange={(e) => setFormData({ ...formData, value: e.target.value })}
-          className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-none focus:border-pink resize-none"
+          className="w-full px-4 py-3 bg-border-light border border-border-light rounded-lg text-white focus:outline-hidden focus:border-pink resize-none"
           placeholder="Enter the setting value..."
         />
       </div>
