@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { ClarityScript } from "@/components/ClarityScript";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -27,26 +28,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" suppressHydrationWarning>
+      <body suppressHydrationWarning>
         {children}
         <Analytics />
         <SpeedInsights />
-        {process.env.NEXT_PUBLIC_CLARITY_ID && (
-          <>
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window, document, "clarity", "script", "${process.env.NEXT_PUBLIC_CLARITY_ID}");`,
-              }}
-            />
-            <noscript>
-              <img
-                src={`https://www.clarity.ms/collect?cid=${process.env.NEXT_PUBLIC_CLARITY_ID}`}
-                alt=""
-              />
-            </noscript>
-          </>
-        )}
+        <ClarityScript />
       </body>
     </html>
   );

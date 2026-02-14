@@ -78,6 +78,18 @@ section:not(.admin-section) {
   @apply py-24 border-b border-border-light;
 }
 
+/* Section-specific padding (work, drawing: 60px; about, contact: 40px) */
+section#work,
+section#drawing {
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+section#about,
+section#contact {
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
 /* Images */
 img {
   object-fit: contain;
@@ -402,4 +414,10 @@ img {
     line-height: 1.25;
     margin-bottom: 0.75rem;
   }
+}
+
+/* Override Next.js dev portal positioning (nextjs-portal is injected by Next.js) */
+nextjs-portal {
+  left: unset;
+  top: unset;
 }

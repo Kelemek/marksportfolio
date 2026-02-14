@@ -78,8 +78,8 @@ export default function LoginPage() {
           <div
             className={`mt-6 p-4 rounded-lg text-center ${
               message.type === "success"
-                ? "bg-green-900/50 text-green-300"
-                : "bg-red-900/50 text-red-300"
+                ? "bg-pink/20 text-pink border border-pink/50"
+                : "bg-pink/20 text-pink border border-pink/50"
             }`}
           >
             {message.text}
