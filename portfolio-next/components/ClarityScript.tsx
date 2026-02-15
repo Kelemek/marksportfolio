@@ -7,7 +7,7 @@ export function ClarityScript() {
   const clarityId = process.env.NEXT_PUBLIC_CLARITY_ID;
 
   useEffect(() => {
-    setMounted(true);
+    queueMicrotask(() => setMounted(true));
   }, []);
 
   if (!clarityId || !mounted) {

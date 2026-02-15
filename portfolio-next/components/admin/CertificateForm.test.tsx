@@ -604,7 +604,7 @@ describe('CertificateForm Component', () => {
         update: vi.fn().mockReturnValueOnce({
           eq: vi.fn().mockResolvedValueOnce({ error: mockError }),
         }),
-      } as any);
+      } as ReturnType<typeof mockSupabaseClient.from>);
 
       render(<CertificateForm certificate={mockCertificate} mode="edit" />);
       fireEvent.change(screen.getByLabelText('Title *'), { target: { value: 'Master of Science' } });
@@ -634,7 +634,7 @@ describe('CertificateForm Component', () => {
         update: vi.fn().mockReturnValueOnce({
           eq: vi.fn().mockResolvedValueOnce({ error: mockError }),
         }),
-      } as any);
+      } as ReturnType<typeof mockSupabaseClient.from>);
 
       render(<CertificateForm certificate={mockCertificate} mode="edit" />);
       fireEvent.change(screen.getByLabelText('Title *'), { target: { value: 'Updated Title' } });

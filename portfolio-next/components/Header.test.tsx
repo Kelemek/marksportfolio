@@ -43,7 +43,6 @@ describe('Header Component', () => {
   it('has background image styling applied', () => {
     render(<Header />);
     const header = screen.getByRole('banner');
-    const style = window.getComputedStyle(header);
     expect(header).toHaveStyle({
       backgroundImage: expect.stringContaining('linear-gradient'),
     });

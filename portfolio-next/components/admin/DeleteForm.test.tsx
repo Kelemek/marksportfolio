@@ -67,7 +67,6 @@ describe('DeleteForm Component', () => {
 
   it('prevents form submission when user cancels confirmation', () => {
     vi.stubGlobal('confirm', vi.fn(() => false));
-    const preventDefaultSpy = vi.fn();
 
     render(<DeleteForm action="/api/delete" id="123" />);
     const button = screen.getByRole('button');

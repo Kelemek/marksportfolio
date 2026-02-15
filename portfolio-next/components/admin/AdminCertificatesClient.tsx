@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import SortableCertificateList from "./SortableCertificateList";
 import type { Certificate } from "@/types/certificate";
 
@@ -13,8 +12,6 @@ export default function AdminCertificatesClient({
   educationCertificates,
   scrimbaCertificates,
 }: AdminCertificatesClientProps) {
-  const router = useRouter();
-
   return (
     <>
       {/* Education Certificates */}

@@ -73,10 +73,12 @@ const mockDrawingProjects: Project[] = [
   },
 ];
 
+const mockFetch = vi.mocked(global.fetch);
+
 describe('AdminProjectsClient Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    (global.fetch as any).mockClear();
+    mockFetch.mockClear();
     mockRouter.refresh.mockClear();
     mockRouter.push.mockClear();
   });
@@ -151,7 +153,7 @@ describe('AdminProjectsClient Component', () => {
 
   describe('Visibility Toggle Handler', () => {
     it('calls visibility toggle API with correct payload', async () => {
-      (global.fetch as any).mockResolvedValueOnce({
+      mockFetch.mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve({}),
       });
@@ -176,7 +178,7 @@ describe('AdminProjectsClient Component', () => {
     });
 
     it('calls router.refresh on successful visibility toggle', async () => {
-      (global.fetch as any).mockResolvedValueOnce({
+      mockFetch.mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve({}),
       });
@@ -194,7 +196,7 @@ describe('AdminProjectsClient Component', () => {
     });
 
     it('toggles visibility from visible to hidden', async () => {
-      (global.fetch as any).mockResolvedValueOnce({
+      mockFetch.mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve({}),
       });
@@ -218,7 +220,7 @@ describe('AdminProjectsClient Component', () => {
 
     it('handles API errors gracefully', async () => {
       const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-      (global.fetch as any).mockResolvedValueOnce({
+      mockFetch.mockResolvedValueOnce({
         ok: false,
         status: 500,
       });
@@ -242,7 +244,7 @@ describe('AdminProjectsClient Component', () => {
 
     it('handles network errors gracefully', async () => {
       const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-      (global.fetch as any).mockRejectedValueOnce(new Error('Network error'));
+      mockFetch.mockRejectedValueOnce(new Error('Network error'));
 
       render(
         <AdminProjectsClient codingProjects={mockCodingProjects} drawingProjects={[]} />
@@ -259,7 +261,7 @@ describe('AdminProjectsClient Component', () => {
     });
 
     it('handles drawing project visibility toggle', async () => {
-      (global.fetch as any).mockResolvedValueOnce({
+      mockFetch.mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve({}),
       });
@@ -282,7 +284,7 @@ describe('AdminProjectsClient Component', () => {
     });
 
     it('handles multiple visibility toggles', async () => {
-      (global.fetch as any).mockResolvedValue({
+      mockFetch.mockResolvedValue({
         ok: true,
         json: () => Promise.resolve({}),
       });

@@ -224,7 +224,7 @@ describe('DeployResumeButton Component', () => {
     const originalSetTimeout = global.setTimeout;
     vi.stubGlobal(
       'setTimeout',
-      (callback: () => void, _delay: number) => {
+      (callback: () => void) => {
         const wrapped = () => {
           vi.stubGlobal('setTimeout', originalSetTimeout);
           callback();
@@ -258,7 +258,7 @@ describe('DeployResumeButton Component', () => {
     const originalSetTimeout = global.setTimeout;
     vi.stubGlobal(
       'setTimeout',
-      (callback: () => void, _delay: number) => {
+      (callback: () => void) => {
         const wrapped = () => {
           vi.stubGlobal('setTimeout', originalSetTimeout);
           callback();

@@ -2,7 +2,6 @@ import { createClient } from "@/lib/supabase/server";
 import { createClient as createBrowserClient } from "@supabase/supabase-js";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import Link from "next/link";
 import { Navigation, Footer } from "@/components";
 import type { Project } from "@/types/project";
 

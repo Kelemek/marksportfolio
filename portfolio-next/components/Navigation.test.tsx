@@ -82,7 +82,7 @@ describe('Navigation Component', () => {
   });
 
   it('sets scroll progress on scroll event', async () => {
-    const { container } = render(<Navigation />);
+    render(<Navigation />);
     const nav = screen.getByRole('navigation');
 
     // Simulate scroll event

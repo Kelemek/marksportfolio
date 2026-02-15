@@ -38,23 +38,15 @@ describe('DeleteButton Component', () => {
     render(<DeleteButton projectId="123" projectTitle="Test Project" />);
     const button = screen.getByRole('button', { name: /Delete/ });
     
-    const form = button.closest('form') as HTMLFormElement;
-    const submitSpy = vi.spyOn(form, 'submit');
-    
     fireEvent.click(button);
     expect(vi.mocked(confirm)).toHaveBeenCalledWith('Are you sure you want to delete "Test Project"?');
   });
 
   it('prevents form submission when user cancels confirmation', () => {
     vi.stubGlobal('confirm', vi.fn(() => false));
-    const preventDefaultSpy = vi.fn();
     
     render(<DeleteButton projectId="123" projectTitle="Test Project" />);
     const button = screen.getByRole('button', { name: /Delete/ });
-    
-    const mockEvent = {
-      preventDefault: preventDefaultSpy,
-    } as unknown as React.FormEvent<HTMLFormElement>;
     
     fireEvent.click(button);
     expect(vi.mocked(confirm)).toHaveBeenCalledWith('Are you sure you want to delete "Test Project"?');

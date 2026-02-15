@@ -183,8 +183,8 @@ describe('SkillForm Component', () => {
 
   describe('Error Display', () => {
     it('renders error container if error exists', () => {
-      const { rerender } = render(<SkillForm mode="create" />);
-      let errorDiv = screen.queryByText(/error/i);
+      render(<SkillForm mode="create" />);
+      const errorDiv = screen.queryByText(/error/i);
       expect(errorDiv).not.toBeInTheDocument();
     });
   });

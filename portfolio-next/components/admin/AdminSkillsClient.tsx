@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import SortableSkillList from "./SortableSkillList";
 import type { Skill } from "@/types/skill";
 
@@ -13,8 +12,6 @@ export default function AdminSkillsClient({
   systemsSkills,
   developmentSkills,
 }: AdminSkillsClientProps) {
-  const router = useRouter();
-
   return (
     <>
       {/* Systems Skills */}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 
 export default function LoginPage() {
@@ -87,9 +88,9 @@ export default function LoginPage() {
         )}
 
         <div className="mt-8 text-center">
-          <a href="/" className="text-pink hover:underline">
+          <Link href="/" className="text-pink hover:underline">
             ← Back to Portfolio
-          </a>
+          </Link>
         </div>
       </div>
     </div>
