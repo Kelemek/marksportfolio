@@ -220,72 +220,79 @@ describe('DeployResumeButton Component', () => {
     });
   });
 
-  it('resets to idle state after success timeout', async () => {
-    const originalSetTimeout = global.setTimeout;
-    vi.stubGlobal(
-      'setTimeout',
-      (callback: () => void) => {
-        const wrapped = () => {
-          vi.stubGlobal('setTimeout', originalSetTimeout);
-          callback();
-        };
-        return originalSetTimeout(wrapped, 0) as unknown as ReturnType<typeof setTimeout>;
-      }
-    );
+  it('resets to idle state after success timeout', { timeout: 12000 }, async () => {
+      const realSetTimeout = global.setTimeout;
+      vi.stubGlobal(
+        'fetch',
+        vi.fn(() =>
+          new Promise<Response>((resolve) =>
+            realSetTimeout(
+              () =>
+                resolve(
+                  new Response(JSON.stringify({ success: true }), {
+                    status: 200,
+                    headers: { 'content-type': 'application/json' },
+                  })
+                ),
+              0
+            )
+          )
+        )
+      );
 
-    vi.stubGlobal('fetch', vi.fn(() =>
-      Promise.resolve(
-        new Response(JSON.stringify({ success: true }), {
-          status: 200,
-          headers: { 'content-type': 'application/json' },
-        })
-      )
-    ));
+      render(<DeployResumeButton />);
+      fireEvent.click(screen.getByRole('button'));
 
-    render(<DeployResumeButton />);
-    fireEvent.click(screen.getByRole('button'));
+      await waitFor(
+        () => {
+          expect(screen.getByRole('button', { name: /Deploy Started/ })).toBeInTheDocument();
+        },
+        { timeout: 3000 }
+      );
 
-    await waitFor(() => {
-      expect(screen.getByRole('button', { name: /Deploy Started/ })).toBeInTheDocument();
-    });
-
-    await waitFor(() => {
-      expect(screen.getByRole('button', { name: /Redeploy Resume/ })).toBeInTheDocument();
-    });
+      await waitFor(
+        () => {
+          expect(screen.getByRole('button', { name: /Redeploy Resume/ })).toBeInTheDocument();
+        },
+        { timeout: 6000 }
+      );
   });
 
-  it('resets to idle state after error timeout', async () => {
-    const originalSetTimeout = global.setTimeout;
-    vi.stubGlobal(
-      'setTimeout',
-      (callback: () => void, delay: number) => {
-        const wrapped = () => {
-          vi.stubGlobal('setTimeout', originalSetTimeout);
-          callback();
-        };
-        // Use a small delay so React can render the error state before the callback runs
-        return originalSetTimeout(wrapped, Math.min(delay, 50)) as unknown as ReturnType<typeof setTimeout>;
-      }
-    );
+  it('resets to idle state after error timeout', { timeout: 12000 }, async () => {
+      const realSetTimeout = global.setTimeout;
+      vi.stubGlobal(
+        'fetch',
+        vi.fn(() =>
+          new Promise<Response>((resolve) =>
+            realSetTimeout(
+              () =>
+                resolve(
+                  new Response(JSON.stringify({ error: 'Failed' }), {
+                    status: 500,
+                    headers: { 'content-type': 'application/json' },
+                  })
+                ),
+              0
+            )
+          )
+        )
+      );
 
-    vi.stubGlobal('fetch', vi.fn(() =>
-      Promise.resolve(
-        new Response(JSON.stringify({ error: 'Failed' }), {
-          status: 500,
-          headers: { 'content-type': 'application/json' },
-        })
-      )
-    ));
+      render(<DeployResumeButton />);
+      fireEvent.click(screen.getByRole('button'));
 
-    render(<DeployResumeButton />);
-    fireEvent.click(screen.getByRole('button'));
+      await waitFor(
+        () => {
+          expect(screen.getByRole('button', { name: /Deploy Failed/ })).toBeInTheDocument();
+        },
+        { timeout: 3000 }
+      );
 
-    await waitFor(() => {
-      expect(screen.getByRole('button', { name: /Deploy Failed/ })).toBeInTheDocument();
-    });
-
-    await waitFor(() => {
-      expect(screen.getByRole('button', { name: /Redeploy Resume/ })).toBeInTheDocument();
-    });
+      await waitFor(
+        () => {
+          expect(screen.getByRole('button', { name: /Redeploy Resume/ })).toBeInTheDocument();
+        },
+        { timeout: 6000 }
+      );
   });
 });
