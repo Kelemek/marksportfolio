@@ -258,12 +258,13 @@ describe('DeployResumeButton Component', () => {
     const originalSetTimeout = global.setTimeout;
     vi.stubGlobal(
       'setTimeout',
-      (callback: () => void) => {
+      (callback: () => void, delay: number) => {
         const wrapped = () => {
           vi.stubGlobal('setTimeout', originalSetTimeout);
           callback();
         };
-        return originalSetTimeout(wrapped, 0) as unknown as ReturnType<typeof setTimeout>;
+        // Use a small delay so React can render the error state before the callback runs
+        return originalSetTimeout(wrapped, Math.min(delay, 50)) as unknown as ReturnType<typeof setTimeout>;
       }
     );
 
