@@ -16,23 +16,24 @@ export const revalidate = 60;
 async function getProjects() {
   const supabase = await createClient();
 
-  const { data: codingProjects } = await supabase
-    .from("projects")
-    .select("*")
-    .eq("type", "coding")
-    .eq("is_visible", true)
-    .order("display_order", { ascending: true });
-
-  const { data: drawingProjects } = await supabase
-    .from("projects")
-    .select("*")
-    .eq("type", "drawing")
-    .eq("is_visible", true)
-    .order("display_order", { ascending: true });
+  const [codingResult, drawingResult] = await Promise.all([
+    supabase
+      .from("projects")
+      .select("*")
+      .eq("type", "coding")
+      .eq("is_visible", true)
+      .order("display_order", { ascending: true }),
+    supabase
+      .from("projects")
+      .select("*")
+      .eq("type", "drawing")
+      .eq("is_visible", true)
+      .order("display_order", { ascending: true }),
+  ]);
 
   return {
-    coding: (codingProjects || []) as Project[],
-    drawing: (drawingProjects || []) as Project[],
+    coding: (codingResult.data || []) as Project[],
+    drawing: (drawingResult.data || []) as Project[],
   };
 }
 

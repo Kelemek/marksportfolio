@@ -8,7 +8,12 @@ interface CookieToSet {
   options?: CookieOptions;
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
+  // Skip auth for public routes - avoids Supabase round-trip and improves TTFB
+  if (!request.nextUrl.pathname.startsWith("/admin")) {
+    return NextResponse.next({ request });
+  }
+
   let supabaseResponse = NextResponse.next({
     request,
   });
@@ -36,28 +41,21 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  // Refresh session if it exists
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Protect /admin routes
-  if (request.nextUrl.pathname.startsWith("/admin")) {
-    if (!user) {
-      // Redirect to login if not authenticated
-      const url = request.nextUrl.clone();
-      url.pathname = "/login";
-      return NextResponse.redirect(url);
-    }
+  if (!user) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+    return NextResponse.redirect(url);
+  }
 
-    // Optional: Check if user email matches admin email
-    const adminEmail = process.env.ADMIN_EMAIL || "markdlarson@me.com";
-    if (user.email !== adminEmail) {
-      // Redirect non-admin users to home
-      const url = request.nextUrl.clone();
-      url.pathname = "/";
-      return NextResponse.redirect(url);
-    }
+  const adminEmail = process.env.ADMIN_EMAIL || "markdlarson@me.com";
+  if (user.email !== adminEmail) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/";
+    return NextResponse.redirect(url);
   }
 
   return supabaseResponse;
