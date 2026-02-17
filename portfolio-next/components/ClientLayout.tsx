@@ -1,5 +1,3 @@
-"use client";
-
 import { Navigation } from "@/components";
 
 export function ClientLayout({ children }: { children: React.ReactNode }) {
