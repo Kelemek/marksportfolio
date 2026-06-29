@@ -36,7 +36,7 @@ jobs:
           node scripts/backup-database-json.js
 
       - name: Upload backups as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: supabase-backup
           path: portfolio-next/backups/*.json.gz
