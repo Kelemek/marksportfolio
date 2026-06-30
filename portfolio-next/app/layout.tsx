@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import { ClarityScript } from "@/components/ClarityScript";
+import { Suspense } from "react";
+import { PostHogPageView } from "@/components/PostHogPageView";
+import { PostHogProvider } from "@/components/PostHogProvider";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -53,10 +53,12 @@ export default function RootLayout({
         />
       </head>
       <body suppressHydrationWarning>
-        {children}
-        <Analytics />
-        <SpeedInsights />
-        <ClarityScript />
+        <PostHogProvider>
+          <Suspense fallback={null}>
+            <PostHogPageView />
+          </Suspense>
+          {children}
+        </PostHogProvider>
       </body>
     </html>
   );

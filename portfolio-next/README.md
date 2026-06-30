@@ -60,9 +60,7 @@ Protected admin interface at `/admin` for managing all site content:
 
 | Tool | Purpose |
 |------|---------|
-| **@vercel/analytics** | Web analytics |
-| **@vercel/speed-insights** | Performance monitoring |
-| **Clarity** | Microsoft Clarity session recording (optional, via `NEXT_PUBLIC_CLARITY_ID`) |
+| **PostHog** | Web analytics, session replay (optional, via `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN`) |
 
 ### Testing
 
@@ -124,7 +122,8 @@ portfolio-next/
 │   ├── Header.tsx
 │   ├── Navigation.tsx
 │   ├── ProjectCard.tsx
-│   └── ClarityScript.tsx
+│   ├── PostHogProvider.tsx
+│   └── PostHogPageView.tsx
 ├── lib/supabase/
 │   ├── client.ts                 # Browser Supabase client
 │   └── server.ts                 # Server Supabase client
@@ -195,7 +194,8 @@ ADMIN_EMAIL=your-email@example.com
 Optional:
 
 ```
-NEXT_PUBLIC_CLARITY_ID=         # Microsoft Clarity project ID
+NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN=  # PostHog project token
+NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
 VERCEL_DEPLOY_HOOK_RESUME=      # Vercel deploy hook URL for resume rebuild
 ```
 
