@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import type { CookieOptions } from "@supabase/ssr";
+import { isAdminEmail } from "@/lib/auth/admin";
 
 interface CookieToSet {
   name: string;
@@ -54,8 +55,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  const adminEmail = process.env.ADMIN_EMAIL || "markdlarson@me.com";
-  if (user.email !== adminEmail) {
+  if (!user.email || !isAdminEmail(user.email)) {
     const url = request.nextUrl.clone();
     url.pathname = "/";
     return NextResponse.redirect(url);

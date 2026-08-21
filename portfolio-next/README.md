@@ -27,7 +27,7 @@ Protected admin interface at `/admin` for managing all site content:
 **Admin Tools:**
 
 - **Deploy Resume**: Triggers Vercel deploy hook to rebuild resume sub-project
-- **Magic Link Auth**: Passwordless login via Supabase Auth
+- **Email OTP Auth**: Passwordless login via Supabase Auth (6-digit verification code)
 
 ---
 
@@ -46,7 +46,7 @@ Protected admin interface at `/admin` for managing all site content:
 
 | Technology | Purpose |
 |------------|---------|
-| **Supabase** | PostgreSQL database, Auth (Magic Link), Storage |
+| **Supabase** | PostgreSQL database, Auth (Email OTP), Storage |
 | **@supabase/ssr** | Server-side auth with cookie handling |
 
 ### UI & Interaction
@@ -100,7 +100,7 @@ portfolio-next/
 │   │   ├── certificates/         # delete, reorder
 │   │   ├── jobs/                 # delete, reorder
 │   │   └── settings/             # delete
-│   ├── auth/callback/            # Magic link callback
+│   ├── auth/callback/            # Legacy magic-link callback (optional)
 │   ├── auth/signout/             # Sign out handler
 │   ├── login/                    # Login page
 │   ├── projects/[slug]/          # Project detail page
@@ -173,7 +173,7 @@ npm install
 1. Create a project at [supabase.com](https://supabase.com)
 2. Run the schema from `supabase/schema.sql` in the SQL Editor
 3. Create storage buckets `images` and `certificates` (public)
-4. Enable Email Auth and Magic Link in Authentication > Providers
+4. Enable Email Auth in Authentication > Providers (OTP / 6-digit code template)
 
 ### 3. Environment Variables
 
@@ -199,14 +199,16 @@ NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
 VERCEL_DEPLOY_HOOK_RESUME=      # Vercel deploy hook URL for resume rebuild
 ```
 
-### 4. Supabase Auth Redirect URLs
+### 4. Supabase Auth Configuration
 
-In Authentication > URL Configuration, add:
+In Authentication > Providers > Email, ensure email OTP is enabled and the email template sends a **6-digit verification code**.
+
+Ensure the admin user already exists under Authentication > Users (OTP login uses `shouldCreateUser: false`).
+
+Optional — legacy magic-link redirect URLs (not used by OTP login):
 
 - Site URL: `http://localhost:3000` (dev) or your production URL
-- Redirect URLs:
-  - `http://localhost:3000/auth/callback`
-  - `https://your-domain.vercel.app/auth/callback`
+- Redirect URLs: `http://localhost:3000/auth/callback`, `https://your-domain.vercel.app/auth/callback`
 
 ### 5. Run Development Server
 
@@ -236,7 +238,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 1. Go to `/login`
 2. Enter your admin email (must match `ADMIN_EMAIL`)
-3. Click the magic link in your email
+3. Enter the 6-digit verification code from your email
 4. You’ll be redirected to `/admin`
 5. Manage Projects, Skills, Certificates, Jobs, and Settings
 6. Changes are reflected on the public site via ISR (revalidate API)
@@ -249,7 +251,7 @@ Open [http://localhost:3000](http://localhost:3000).
 2. Import the project in [vercel.com](https://vercel.com)
 3. Set root directory to `portfolio-next`
 4. Add environment variables: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `ADMIN_EMAIL`
-5. Add your Vercel URL to Supabase Auth redirect URLs
+5. Confirm Supabase Email OTP is enabled and the admin user exists in Authentication > Users
 
 ---
 
