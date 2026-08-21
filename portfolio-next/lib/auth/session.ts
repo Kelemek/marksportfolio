@@ -27,11 +27,16 @@ function loginStepsEqual(a: LoginStep, b: LoginStep): boolean {
     return false;
   }
 
-  if (a.kind === "email") {
-    return true;
+  switch (a.kind) {
+    case "email":
+      return true;
+    case "code":
+      return b.kind === "code" && a.email === b.email;
+    default: {
+      const _exhaustive: never = a;
+      return _exhaustive;
+    }
   }
-
-  return a.email === b.email;
 }
 
 function parseLoginStep(): LoginStep {
