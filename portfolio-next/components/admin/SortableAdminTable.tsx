@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   DndContext,
   closestCenter,
@@ -93,6 +93,12 @@ export default function SortableAdminTable<T extends { id: string }>({
   const [items, setItems] = useState(initialItems);
   const [saving, setSaving] = useState(false);
 
+  useEffect(() => {
+    if (!saving) {
+      setItems(initialItems);
+    }
+  }, [initialItems, saving]);
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -109,6 +115,7 @@ export default function SortableAdminTable<T extends { id: string }>({
 
     const oldIndex = items.findIndex((item) => item.id === active.id);
     const newIndex = items.findIndex((item) => item.id === over.id);
+    const previousItems = items;
     const newOrder = arrayMove(items, oldIndex, newIndex);
     setItems(newOrder);
 
@@ -117,7 +124,7 @@ export default function SortableAdminTable<T extends { id: string }>({
       await onReorder(newOrder.map((item) => item.id));
     } catch (error) {
       console.error("Error saving order:", error);
-      setItems(initialItems);
+      setItems(previousItems);
     } finally {
       setSaving(false);
     }

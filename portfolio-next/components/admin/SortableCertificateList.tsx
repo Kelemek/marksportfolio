@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { postAdminJson } from "@/lib/admin/postAdminJson";
 import { getCertificatePublicUrl } from "@/lib/certificates";
 import DeleteForm from "./DeleteForm";
 import SortableAdminTable from "./SortableAdminTable";
@@ -49,15 +50,10 @@ export default function SortableCertificateList({
   category,
 }: SortableCertificateListProps) {
   async function handleReorder(certificateIds: string[]) {
-    const response = await fetch("/api/certificates/reorder", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ category, certificateIds }),
+    await postAdminJson("/api/certificates/reorder", {
+      category,
+      certificateIds,
     });
-
-    if (!response.ok) {
-      throw new Error("Failed to save order");
-    }
   }
 
   return (

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { postAdminJson } from "@/lib/admin/postAdminJson";
 import DeleteForm from "./DeleteForm";
 import SortableAdminTable from "./SortableAdminTable";
 import type { Project } from "@/types/project";
@@ -17,15 +18,7 @@ export default function SortableProjectList({
   onToggleVisibility,
 }: SortableProjectListProps) {
   async function handleReorder(projectIds: string[]) {
-    const response = await fetch("/api/projects/reorder", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ type, projectIds }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to save order");
-    }
+    await postAdminJson("/api/projects/reorder", { type, projectIds });
   }
 
   return (

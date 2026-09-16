@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { postAdminJson } from "@/lib/admin/postAdminJson";
 import DeleteForm from "./DeleteForm";
 import SortableAdminTable from "./SortableAdminTable";
 import type { Job } from "@/types/job";
@@ -11,15 +12,7 @@ interface SortableJobListProps {
 
 export default function SortableJobList({ initialJobs }: SortableJobListProps) {
   async function handleReorder(jobIds: string[]) {
-    const response = await fetch("/api/jobs/reorder", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ jobIds }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to save order");
-    }
+    await postAdminJson("/api/jobs/reorder", { jobIds });
   }
 
   return (

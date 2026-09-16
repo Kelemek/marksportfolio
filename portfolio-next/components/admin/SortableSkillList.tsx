@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { postAdminJson } from "@/lib/admin/postAdminJson";
 import DeleteForm from "./DeleteForm";
 import SortableAdminTable from "./SortableAdminTable";
 import type { Skill } from "@/types/skill";
@@ -15,15 +16,7 @@ export default function SortableSkillList({
   category,
 }: SortableSkillListProps) {
   async function handleReorder(skillIds: string[]) {
-    const response = await fetch("/api/skills/reorder", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ category, skillIds }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to save order");
-    }
+    await postAdminJson("/api/skills/reorder", { category, skillIds });
   }
 
   return (

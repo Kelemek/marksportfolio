@@ -1,8 +1,14 @@
 import { requireAdmin } from "@/lib/auth/requireAdmin";
+import { revalidatePublicContent } from "@/lib/revalidate";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
+    const auth = await requireAdmin();
+    if (auth.error) {
+      return auth.error;
+    }
+
     const { category, certificateIds } = await request.json();
 
     if (!category || !certificateIds || !Array.isArray(certificateIds)) {
@@ -10,11 +16,6 @@ export async function POST(request: Request) {
         { error: "Invalid request body" },
         { status: 400 }
       );
-    }
-
-    const auth = await requireAdmin();
-    if (auth.error) {
-      return auth.error;
     }
 
     const updates = certificateIds.map((id: string, index: number) =>
@@ -26,6 +27,8 @@ export async function POST(request: Request) {
     );
 
     await Promise.all(updates);
+
+    revalidatePublicContent();
 
     return NextResponse.json({ success: true });
   } catch (error) {
