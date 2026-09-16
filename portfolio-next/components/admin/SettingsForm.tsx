@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { requestRevalidate } from "@/lib/revalidateClient";
 import type { Settings, SettingsInsert, SettingsUpdate } from "@/types/settings";
 
 interface SettingsFormProps {
@@ -47,7 +48,7 @@ export default function SettingsForm({ setting, mode }: SettingsFormProps) {
       }
 
       // Trigger revalidation
-      await fetch("/api/revalidate", { method: "POST" });
+      await requestRevalidate();
 
       router.push("/admin/settings");
       router.refresh();

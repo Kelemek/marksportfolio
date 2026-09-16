@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
-import AdminSkillsClient from "@/components/admin/AdminSkillsClient";
+import SortableSkillList from "@/components/admin/SortableSkillList";
 import type { Skill } from "@/types/skill";
 
 export default async function AdminSkillsPage() {
@@ -31,10 +31,24 @@ export default async function AdminSkillsPage() {
         </Link>
       </div>
 
-      <AdminSkillsClient
-        systemsSkills={systemsSkills}
-        developmentSkills={developmentSkills}
-      />
+      <section className="admin-section mb-6">
+        <h2 className="text-medium-1 font-heading text-white mb-2">
+          Systems Skills ({systemsSkills.length})
+        </h2>
+        <p className="text-white-1 text-sm mb-3">Drag rows to reorder</p>
+        <SortableSkillList initialSkills={systemsSkills} category="systems" />
+      </section>
+
+      <section className="admin-section">
+        <h2 className="text-medium-1 font-heading text-white mb-2">
+          Development Skills ({developmentSkills.length})
+        </h2>
+        <p className="text-white-1 text-sm mb-3">Drag rows to reorder</p>
+        <SortableSkillList
+          initialSkills={developmentSkills}
+          category="development"
+        />
+      </section>
     </div>
   );
 }

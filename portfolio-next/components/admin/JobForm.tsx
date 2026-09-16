@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { requestRevalidate } from "@/lib/revalidateClient";
 import type { Job, JobInsert, JobUpdate } from "@/types/job";
 
 interface JobFormProps {
@@ -108,7 +109,7 @@ export default function JobForm({ job, mode }: JobFormProps) {
       }
 
       // Trigger revalidation
-      await fetch("/api/revalidate", { method: "POST" });
+      await requestRevalidate();
 
       router.push("/admin/jobs");
       router.refresh();

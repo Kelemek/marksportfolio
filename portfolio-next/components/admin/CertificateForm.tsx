@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { requestRevalidate } from "@/lib/revalidateClient";
+import { getCertificatePublicUrl } from "@/lib/certificates";
 import type {
   Certificate,
   CertificateInsert,
@@ -124,7 +126,7 @@ export default function CertificateForm({
       }
 
       // Trigger revalidation
-      await fetch("/api/revalidate", { method: "POST" });
+      await requestRevalidate();
 
       router.push("/admin/certificates");
       router.refresh();
@@ -219,7 +221,7 @@ export default function CertificateForm({
           <p className="text-white-1 text-sm mb-2">
             Current: {" "}
             <a
-              href={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/certificates/${certificate.pdf_path}`}
+              href={getCertificatePublicUrl(certificate.pdf_path)}
               target="_blank"
               rel="noopener noreferrer"
               className="text-pink hover:underline"

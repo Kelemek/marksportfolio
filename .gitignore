@@ -3,6 +3,7 @@ node_modules/
 
 # misc
 .DS_Store
+.memory
 
 # debug
 npm-debug.log*

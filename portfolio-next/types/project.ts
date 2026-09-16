@@ -42,15 +42,3 @@ export interface ProjectUpdate {
   display_order?: number;
   is_visible?: boolean;
 }
-
-export type Database = {
-  public: {
-    Tables: {
-      projects: {
-        Row: Project;
-        Insert: ProjectInsert;
-        Update: ProjectUpdate;
-      };
-    };
-  };
-};

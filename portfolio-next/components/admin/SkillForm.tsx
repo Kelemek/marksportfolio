@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { requestRevalidate } from "@/lib/revalidateClient";
 import type { Skill, SkillInsert, SkillUpdate } from "@/types/skill";
 
 interface SkillFormProps {
@@ -61,7 +62,7 @@ export default function SkillForm({ skill, mode }: SkillFormProps) {
       }
 
       // Trigger revalidation
-      await fetch("/api/revalidate", { method: "POST" });
+      await requestRevalidate();
 
       router.push("/admin/skills");
       router.refresh();

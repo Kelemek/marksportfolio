@@ -5,10 +5,7 @@
     "dev": "npm run dev --prefix portfolio-next",
     "build": "npm run build --prefix portfolio-next",
     "start": "npm run start --prefix portfolio-next",
-    "lint": "npm run lint --prefix portfolio-next"
-  }
-  ,
-  "dependencies": {
-    "@supabase/supabase-js": "^2.108.2"
+    "lint": "npm run lint --prefix portfolio-next",
+    "test": "npm run test --prefix portfolio-next"
   }
 }

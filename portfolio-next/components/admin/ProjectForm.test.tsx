@@ -15,16 +15,24 @@ vi.mock('next/navigation', () => ({
 // Mock Supabase storage
 const mockStorageUpload = vi.fn().mockResolvedValue({ error: null });
 const mockGetPublicUrl = vi.fn(() => ({ data: { publicUrl: 'https://example.com/uploaded.jpg' } }));
+const createProjectsTableMock = () => ({
+  insert: vi.fn().mockResolvedValue({ data: {}, error: null }),
+  update: vi.fn().mockReturnValue({
+    eq: vi.fn().mockResolvedValue({ data: {}, error: null }),
+  }),
+  select: vi.fn().mockReturnValue({
+    eq: vi.fn().mockReturnValue({
+      order: vi.fn().mockReturnValue({
+        limit: vi.fn().mockReturnValue({
+          single: vi.fn().mockResolvedValue({ data: { display_order: 1 }, error: null }),
+        }),
+      }),
+    }),
+  }),
+});
+
 const mockSupabaseClient = {
-  from: vi.fn(() => ({
-    insert: vi.fn().mockResolvedValue({ data: {}, error: null }),
-    update: vi.fn().mockReturnValue({
-      eq: vi.fn().mockResolvedValue({ data: {}, error: null }),
-    }),
-    select: vi.fn().mockReturnValue({
-      eq: vi.fn().mockResolvedValue({ data: [], error: null }),
-    }),
-  })),
+  from: vi.fn(() => createProjectsTableMock()),
   storage: {
     from: vi.fn(() => ({
       upload: mockStorageUpload,
@@ -66,6 +74,7 @@ describe('ProjectForm', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    mockSupabaseClient.from.mockImplementation(() => createProjectsTableMock());
     global.fetch = vi.fn().mockResolvedValue({ ok: true });
     mockRouter.push.mockClear();
     mockRouter.refresh.mockClear();
@@ -207,7 +216,11 @@ describe('ProjectForm', () => {
       fireEvent.click(screen.getByText('Create Project'));
 
       await new Promise(resolve => setTimeout(resolve, 100));
-      expect(global.fetch).toHaveBeenCalledWith('/api/revalidate', { method: 'POST' });
+      expect(global.fetch).toHaveBeenCalledWith('/api/revalidate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slug: 'new-project' }),
+      });
     });
 
     it('navigates to admin page on successful submission', async () => {
@@ -311,15 +324,10 @@ describe('ProjectForm', () => {
     });
   });
 
-  describe('Type and Display Order Fields', () => {
+  describe('Type Field', () => {
     it('renders type select dropdown', () => {
       render(<ProjectForm mode="create" />);
       expect(screen.getByLabelText('Type *')).toBeInTheDocument();
-    });
-
-    it('renders display order input', () => {
-      render(<ProjectForm mode="create" />);
-      expect(screen.getByLabelText('Display Order')).toBeInTheDocument();
     });
 
     it('can change project type', () => {
@@ -338,53 +346,6 @@ describe('ProjectForm', () => {
       render(<ProjectForm project={drawingProject} mode="edit" />);
       const typeSelect = screen.getByLabelText('Type *') as HTMLSelectElement;
       expect(typeSelect.value).toBe('drawing');
-    });
-
-    it('can change display order', () => {
-      render(<ProjectForm mode="create" />);
-      const orderInput = screen.getByLabelText('Display Order') as HTMLInputElement;
-      fireEvent.change(orderInput, { target: { value: '5' } });
-      expect(orderInput.value).toBe('5');
-    });
-
-    it('handles invalid display order as zero', () => {
-      render(<ProjectForm mode="create" />);
-      const orderInput = screen.getByLabelText('Display Order') as HTMLInputElement;
-      fireEvent.change(orderInput, { target: { value: 'abc' } });
-      expect(orderInput.value).toBe('0');
-    });
-  });
-
-  describe('Display Order Buttons', () => {
-    it('increments display order with up button', () => {
-      render(<ProjectForm mode="create" />);
-      const orderInput = screen.getByLabelText('Display Order') as HTMLInputElement;
-      expect(orderInput.value).toBe('0');
-
-      const stepperButtons = document.querySelectorAll('button[type="button"]');
-      const incrementButton = stepperButtons[0];
-      fireEvent.click(incrementButton);
-      expect(orderInput.value).toBe('1');
-    });
-
-    it('decrements display order with down button', () => {
-      render(<ProjectForm mode="create" />);
-      fireEvent.change(screen.getByLabelText('Display Order'), { target: { value: '5' } });
-      const orderInput = screen.getByLabelText('Display Order') as HTMLInputElement;
-
-      const stepperButtons = document.querySelectorAll('button[type="button"]');
-      const decrementButton = stepperButtons[1];
-      fireEvent.click(decrementButton);
-      expect(orderInput.value).toBe('4');
-    });
-
-    it('decrement button does not go below zero', () => {
-      render(<ProjectForm mode="create" />);
-      const orderInput = screen.getByLabelText('Display Order') as HTMLInputElement;
-      const stepperButtons = document.querySelectorAll('button[type="button"]');
-      const decrementButton = stepperButtons[1];
-      fireEvent.click(decrementButton);
-      expect(orderInput.value).toBe('0');
     });
   });
 
@@ -443,10 +404,10 @@ describe('ProjectForm', () => {
 
   describe('Error Handling', () => {
     it('displays error when supabase insert fails', async () => {
-      const mockInsert = vi.fn().mockRejectedValue(new Error('Insert failed'));
-      mockSupabaseClient.from.mockReturnValueOnce({
-        insert: mockInsert,
-      });
+      mockSupabaseClient.from.mockImplementation(() => ({
+        ...createProjectsTableMock(),
+        insert: vi.fn().mockRejectedValue(new Error('Insert failed')),
+      }));
 
       render(<ProjectForm mode="create" />);
       fireEvent.change(screen.getByLabelText('Title *'), { target: { value: 'New Project' } });
@@ -474,9 +435,10 @@ describe('ProjectForm', () => {
     });
 
     it('displays generic error for non-Error throws', async () => {
-      mockSupabaseClient.from.mockReturnValueOnce({
+      mockSupabaseClient.from.mockImplementation(() => ({
+        ...createProjectsTableMock(),
         insert: vi.fn().mockRejectedValue('Unknown error'),
-      });
+      }));
 
       render(<ProjectForm mode="create" />);
       fireEvent.change(screen.getByLabelText('Title *'), { target: { value: 'New Project' } });
@@ -502,12 +464,6 @@ describe('ProjectForm', () => {
       render(<ProjectForm project={mockProject} mode="edit" />);
       const imagePreview = document.querySelector('img[alt="Preview"]');
       expect(imagePreview).toBeInTheDocument();
-    });
-
-    it('loads display order from existing project', () => {
-      render(<ProjectForm project={mockProject} mode="edit" />);
-      const orderInput = screen.getByLabelText('Display Order') as HTMLInputElement;
-      expect(orderInput.value).toBe('1');
     });
 
     it('loads is_visible state from existing project', () => {

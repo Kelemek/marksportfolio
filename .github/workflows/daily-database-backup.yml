@@ -2,7 +2,7 @@ name: Daily Database Backup (API Method)
 
 on:
   schedule:
-    - cron: '0 8 * * *' # daily at 08:00 UTC (adjust as needed)
+    - cron: '0 8 * * *'
   workflow_dispatch: {}
 
 jobs:
@@ -19,19 +19,14 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: '22'
-
-      - name: Install root dependencies
-        run: |
-          npm ci --silent || npm install --no-audit --no-fund
+          cache: 'npm'
+          cache-dependency-path: portfolio-next/package-lock.json
 
       - name: Install dependencies
-        run: |
-          cd portfolio-next || true
-          npm ci --silent || npm install --no-audit --no-fund
+        run: npm ci --prefix portfolio-next
 
       - name: Run backup script
         run: |
-          # Run from the repository root so the script's paths and module resolution work as expected
           mkdir -p portfolio-next/backups
           node scripts/backup-database-json.js
 

@@ -1,4 +1,3 @@
-/* stylelint-disable */
 @import 'tailwindcss';
 
 @theme {
@@ -8,10 +7,9 @@
   --color-white-1: #e5e5e6da;
   --color-border-light: rgb(36, 35, 35);
 
-  --font-sans: Hk Grotesk, sans-serif;
-  --font-heading: Jost, sans-serif;
+  --font-sans: var(--font-body), Hk Grotesk, sans-serif;
+  --font-heading: var(--font-jost), Jost, sans-serif;
 
-  --text-small: 1.125rem;
   --text-normal: 1.375rem;
   --text-medium: 1.75rem;
   --text-medium-1: 2.25rem;
@@ -19,19 +17,14 @@
   --text-huge: 4.6875rem;
 
   --container-container: 1180px;
-  --container-container-normal: 800px;
   --container-container-medium: 700px;
-  --container-container-small: 500px;
 
-  --spacing-gutter-huge: 12rem;
   --spacing-gutter-medium: 6rem;
   --spacing-gutter-normal: 3rem;
   --spacing-gutter-small-1: 2.5rem;
   --spacing-gutter-small: 2rem;
-  --spacing-gutter-x-small: 1rem;
 
   --leading-normal: 1.7;
-  --leading-small: 1.2;
 }
 
 /*
@@ -60,21 +53,6 @@ ol.list-decimal {
   list-style: revert;
 }
 
-/* Custom fonts */
-@font-face {
-  font-family: "Hk Grotesk";
-  font-style: normal;
-  font-weight: 400;
-  src: url("/fonts/HKGrotesk-Regular.woff") format("woff");
-}
-
-@font-face {
-  font-family: "Jost";
-  font-style: normal;
-  font-weight: 400;
-  src: url("/fonts/Jost-Regular.ttf") format("truetype");
-}
-
 /* Base styles */
 html {
   scroll-behavior: smooth;
@@ -83,7 +61,7 @@ html {
 
 body {
   @apply bg-black text-white-1;
-  font-family: "Hk Grotesk", sans-serif;
+  font-family: var(--font-body), "Hk Grotesk", sans-serif;
   line-height: 1.7;
   overflow-x: hidden;
 }
@@ -101,7 +79,7 @@ body {
 h1,
 h2,
 h3 {
-  font-family: "Jost", sans-serif;
+  font-family: var(--font-jost), "Jost", sans-serif;
   font-weight: 400;
   line-height: 1.2;
   @apply text-white;
@@ -117,7 +95,7 @@ h2::after {
 
 /* Links */
 a {
-  font-family: "Jost", sans-serif;
+  font-family: var(--font-jost), "Jost", sans-serif;
   font-weight: 400;
   @apply text-white transition-all duration-200;
 }
@@ -153,7 +131,7 @@ img {
 /* Button styles */
 .btn {
   @apply relative isolate inline-block py-4 px-10 border border-pink text-white no-underline font-normal;
-  font-family: "Jost", sans-serif;
+  font-family: var(--font-jost), "Jost", sans-serif;
 }
 
 .btn::after {
@@ -395,15 +373,6 @@ img {
     padding-bottom: 0.25rem;
   }
 
-  /* Row 3: status (third td) and actions (fourth td) sit side-by-side */
-  .admin-section table tbody tr .status-actions {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
-    padding-top: 0.25rem;
-  }
-
   .admin-section table tbody tr td:nth-child(3) {
     display: inline-flex;
     width: 50%;
@@ -463,10 +432,4 @@ img {
     line-height: 1.25;
     margin-bottom: 0.75rem;
   }
-}
-
-/* Override Next.js dev portal positioning (nextjs-portal is injected by Next.js) */
-nextjs-portal {
-  left: unset;
-  top: unset;
 }

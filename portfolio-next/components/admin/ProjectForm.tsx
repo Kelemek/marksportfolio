@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { requestRevalidate } from "@/lib/revalidateClient";
 import type { Project, ProjectInsert, ProjectUpdate } from "@/types/project";
 
 interface ProjectFormProps {
@@ -30,7 +31,6 @@ export default function ProjectForm({ project, mode }: ProjectFormProps) {
     github_url: project?.github_url || "",
     image_alt: project?.image_alt || "",
     type: project?.type || "coding",
-    display_order: project?.display_order || 0,
     is_visible: project?.is_visible ?? true,
   });
 
@@ -88,11 +88,21 @@ export default function ProjectForm({ project, mode }: ProjectFormProps) {
         image_url: imageUrl,
         image_alt: formData.image_alt || null,
         type: formData.type as "coding" | "drawing",
-        display_order: formData.display_order,
         is_visible: formData.is_visible,
       };
 
       if (mode === "create") {
+        const { data: minOrderData } = await supabase
+          .from("projects")
+          .select("display_order")
+          .eq("type", formData.type)
+          .order("display_order", { ascending: true })
+          .limit(1)
+          .single();
+
+        const minOrder = minOrderData?.display_order ?? 0;
+        (projectData as ProjectInsert).display_order = minOrder - 1;
+
         const { error } = await supabase
           .from("projects")
           .insert(projectData);
@@ -107,8 +117,7 @@ export default function ProjectForm({ project, mode }: ProjectFormProps) {
         if (error) throw error;
       }
 
-      // Trigger revalidation
-      await fetch("/api/revalidate", { method: "POST" });
+      await requestRevalidate(formData.slug);
 
       router.push("/admin");
       router.refresh();
@@ -263,7 +272,7 @@ export default function ProjectForm({ project, mode }: ProjectFormProps) {
         />
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 gap-4">
         <div>
           <label htmlFor="type" className="block text-white mb-2">
             Type *
@@ -287,47 +296,6 @@ export default function ProjectForm({ project, mode }: ProjectFormProps) {
               <svg className="h-4 w-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <label htmlFor="display_order" className="block text-white mb-2">
-            Display Order
-          </label>
-          <div className="relative">
-            <input
-              id="display_order"
-              type="number"
-              min="0"
-              value={formData.display_order}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  display_order: parseInt(e.target.value) || 0,
-                })
-              }
-              className="w-full h-[50px] px-4 pr-10 bg-border-light border border-border-light rounded-lg text-white focus:outline-hidden focus:border-pink [&::-webkit-inner-spin-button]:opacity-0 [&::-webkit-outer-spin-button]:opacity-0"
-            />
-            <div className="absolute inset-y-0 right-0 flex flex-col justify-center pr-3 gap-1">
-              <button
-                type="button"
-                onClick={() => setFormData({ ...formData, display_order: formData.display_order + 1 })}
-                className="text-white hover:text-pink"
-              >
-                <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-                </svg>
-              </button>
-              <button
-                type="button"
-                onClick={() => setFormData({ ...formData, display_order: Math.max(0, formData.display_order - 1) })}
-                className="text-white hover:text-pink"
-              >
-                <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
             </div>
           </div>
         </div>

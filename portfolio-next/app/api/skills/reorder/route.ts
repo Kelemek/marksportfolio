@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/auth/requireAdmin";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -12,20 +12,13 @@ export async function POST(request: Request) {
       );
     }
 
-    const supabase = await createClient();
-
-    // Verify user is authenticated
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const auth = await requireAdmin();
+    if (auth.error) {
+      return auth.error;
     }
 
-    // Update sort_order for each skill
     const updates = skillIds.map((id: string, index: number) =>
-      supabase
+      auth.supabase
         .from("skills")
         .update({ sort_order: index })
         .eq("id", id)

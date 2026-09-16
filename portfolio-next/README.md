@@ -100,7 +100,6 @@ portfolio-next/
 │   │   ├── certificates/         # delete, reorder
 │   │   ├── jobs/                 # delete, reorder
 │   │   └── settings/             # delete
-│   ├── auth/callback/            # Legacy magic-link callback (optional)
 │   ├── auth/signout/             # Sign out handler
 │   ├── login/                    # Login page
 │   ├── projects/[slug]/          # Project detail page
@@ -116,17 +115,18 @@ portfolio-next/
 │   │   └── ...sortable lists
 │   ├── AboutSection.tsx
 │   ├── ContactSection.tsx
-│   ├── ClientLayout.tsx
-│   ├── DrawingCard.tsx
 │   ├── Footer.tsx
 │   ├── Header.tsx
 │   ├── Navigation.tsx
 │   ├── ProjectCard.tsx
 │   ├── PostHogProvider.tsx
 │   └── PostHogPageView.tsx
-├── lib/supabase/
-│   ├── client.ts                 # Browser Supabase client
-│   └── server.ts                 # Server Supabase client
+├── lib/
+│   ├── auth/                     # OTP login helpers
+│   └── supabase/
+│       ├── client.ts             # Browser Supabase client
+│       ├── server.ts             # Server Supabase client
+│       └── public.ts             # Build-time public client
 ├── types/                        # TypeScript interfaces
 │   ├── project.ts
 │   ├── job.ts
@@ -135,7 +135,7 @@ portfolio-next/
 │   └── settings.ts
 ├── supabase/
 │   └── schema.sql                # Database schema + seed
-├── middleware.ts                 # Auth middleware (protects /admin)
+├── proxy.ts                      # Admin route protection (Next.js 16 proxy)
 ├── vitest.config.ts
 └── postcss.config.mjs
 ```
@@ -205,10 +205,7 @@ In Authentication > Providers > Email, ensure email OTP is enabled and the email
 
 Ensure the admin user already exists under Authentication > Users (OTP login uses `shouldCreateUser: false`).
 
-Optional — legacy magic-link redirect URLs (not used by OTP login):
-
-- Site URL: `http://localhost:3000` (dev) or your production URL
-- Redirect URLs: `http://localhost:3000/auth/callback`, `https://your-domain.vercel.app/auth/callback`
+Set Site URL to `http://localhost:3000` for local dev or `https://marklarsonportfolio.vercel.app` in production.
 
 ### 5. Run Development Server
 
@@ -252,6 +249,8 @@ Open [http://localhost:3000](http://localhost:3000).
 3. Set root directory to `portfolio-next`
 4. Add environment variables: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `ADMIN_EMAIL`
 5. Confirm Supabase Email OTP is enabled and the admin user exists in Authentication > Users
+
+Production site: [https://marklarsonportfolio.vercel.app](https://marklarsonportfolio.vercel.app)
 
 ---
 

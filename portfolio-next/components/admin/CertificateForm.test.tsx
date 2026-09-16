@@ -247,7 +247,11 @@ describe('CertificateForm Component', () => {
       fireEvent.click(screen.getByText('Create Certificate'));
 
       await new Promise(resolve => setTimeout(resolve, 100));
-      expect(global.fetch).toHaveBeenCalledWith('/api/revalidate', { method: 'POST' });
+      expect(global.fetch).toHaveBeenCalledWith('/api/revalidate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({}),
+      });
     });
 
     it('navigates to certificates page on successful submission', async () => {

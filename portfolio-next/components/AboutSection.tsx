@@ -4,7 +4,7 @@ export default function AboutSection() {
   return (
     <section className="about" id="about">
       <div className="row">
-        <h2 className="text-large mb-gutter-">About Me</h2>
+        <h2 className="text-large mb-gutter-medium">About Me</h2>
 
         <div className="flex flex-col md:flex-row md:items-center md:gap-gutter-normal">
           {/* Photo */}

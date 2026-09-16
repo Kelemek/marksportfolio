@@ -1,8 +1,21 @@
 import type { Metadata } from "next";
+import localFont from "next/font/local";
 import { Suspense } from "react";
 import { PostHogPageView } from "@/components/PostHogPageView";
 import { PostHogProvider } from "@/components/PostHogProvider";
 import "./globals.css";
+
+const hkGrotesk = localFont({
+  src: "../public/fonts/HKGrotesk-Regular.woff",
+  variable: "--font-body",
+  display: "swap",
+});
+
+const jost = localFont({
+  src: "../public/fonts/Jost-Regular.ttf",
+  variable: "--font-jost",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Mark Larson | A Front-End Developer based in Cambridge Minnesota",
@@ -20,6 +33,7 @@ export const metadata: Metadata = {
     "Next.js",
     "Cambridge Minnesota",
   ],
+  metadataBase: new URL("https://marklarsonportfolio.vercel.app"),
 };
 
 export default function RootLayout({
@@ -28,31 +42,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        {process.env.NEXT_PUBLIC_SUPABASE_URL && (
-          <link
-            rel="preconnect"
-            href={process.env.NEXT_PUBLIC_SUPABASE_URL}
-            crossOrigin="anonymous"
-          />
-        )}
-        <link
-          rel="preload"
-          href="/fonts/HKGrotesk-Regular.woff"
-          as="font"
-          type="font/woff"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preload"
-          href="/fonts/Jost-Regular.ttf"
-          as="font"
-          type="font/ttf"
-          crossOrigin="anonymous"
-        />
-      </head>
-      <body suppressHydrationWarning>
+    <html lang="en" className={`${hkGrotesk.variable} ${jost.variable}`}>
+      <body>
         <PostHogProvider>
           <Suspense fallback={null}>
             <PostHogPageView />

@@ -194,7 +194,11 @@ describe('SettingsForm Component', () => {
       fireEvent.click(screen.getByText('Create Setting'));
 
       await new Promise(resolve => setTimeout(resolve, 100));
-      expect(global.fetch).toHaveBeenCalledWith('/api/revalidate', { method: 'POST' });
+      expect(global.fetch).toHaveBeenCalledWith('/api/revalidate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({}),
+      });
     });
 
     it('navigates to settings page on successful submission', async () => {

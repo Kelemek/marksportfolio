@@ -73,8 +73,8 @@ describe('ProjectCard Component', () => {
     expect(screen.getByText('Angular')).toBeInTheDocument();
   });
 
-  it('renders iframe when mode is iframe and site_url is present', () => {
-    render(<ProjectCard project={mockProject} mode="iframe" />);
+  it('renders iframe for coding variant when site_url is present', () => {
+    render(<ProjectCard project={mockProject} variant="coding" />);
     const iframe = screen.getByTitle(/Interactive Demo/);
     expect(iframe).toBeInTheDocument();
     expect(iframe).toHaveAttribute('src', 'https://example.com');
@@ -107,9 +107,9 @@ describe('ProjectCard Component', () => {
     expect(screen.queryByAltText('View Source Code on GitHub')).not.toBeInTheDocument();
   });
 
-  it('renders image when mode is image and no site_url', () => {
+  it('renders image for coding variant when no site_url', () => {
     const projectImageOnly = { ...mockProject, site_url: null };
-    render(<ProjectCard project={projectImageOnly} mode="image" />);
+    render(<ProjectCard project={projectImageOnly} variant="coding" />);
     const image = screen.getByAltText('E-commerce Platform Preview');
     expect(image).toBeInTheDocument();
   });
@@ -120,7 +120,7 @@ describe('ProjectCard Component', () => {
       site_url: null, 
       image_url: null 
     };
-    render(<ProjectCard project={projectNoPreview} mode="image" />);
+    render(<ProjectCard project={projectNoPreview} variant="coding" />);
     expect(screen.getByText('No preview available')).toBeInTheDocument();
   });
 
@@ -130,7 +130,7 @@ describe('ProjectCard Component', () => {
       site_url: null,
       image_alt: 'Custom alt text'
     };
-    render(<ProjectCard project={projectWithAlt} mode="image" />);
+    render(<ProjectCard project={projectWithAlt} variant="coding" />);
     expect(screen.getByAltText('Custom alt text')).toBeInTheDocument();
   });
 
@@ -140,7 +140,7 @@ describe('ProjectCard Component', () => {
       site_url: null,
       image_alt: null
     };
-    render(<ProjectCard project={projectWithoutAlt} mode="image" />);
+    render(<ProjectCard project={projectWithoutAlt} variant="coding" />);
     expect(screen.getByAltText('E-commerce Platform')).toBeInTheDocument();
   });
 

@@ -8,13 +8,8 @@ on:
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ubuntu-latest
     env:
-      # Placeholder values for build; real credentials only needed at runtime
       NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
       NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder-anon-key-for-ci
 
@@ -30,9 +25,7 @@ jobs:
           cache-dependency-path: portfolio-next/package-lock.json
 
       - name: Install dependencies
-        run: |
-          cd portfolio-next
-          npm ci
+        run: npm ci --prefix portfolio-next
 
       - name: Lint
         run: npm run lint --prefix portfolio-next

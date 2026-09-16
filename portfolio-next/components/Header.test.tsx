@@ -40,11 +40,8 @@ describe('Header Component', () => {
     expect(header).toHaveAttribute('role', 'banner');
   });
 
-  it('has background image styling applied', () => {
+  it('renders the hero background image', () => {
     render(<Header />);
-    const header = screen.getByRole('banner');
-    expect(header).toHaveStyle({
-      backgroundImage: expect.stringContaining('linear-gradient'),
-    });
+    expect(screen.getByAltText('')).toBeInTheDocument();
   });
 });

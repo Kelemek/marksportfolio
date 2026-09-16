@@ -1,16 +1,12 @@
 import { createClient } from "@/lib/supabase/server";
-import {
-  ClientLayout,
-  Header,
-  ProjectCard,
-  DrawingCard,
-  AboutSection,
-  ContactSection,
-  Footer,
-} from "@/components";
+import Navigation from "@/components/Navigation";
+import Header from "@/components/Header";
+import ProjectCard from "@/components/ProjectCard";
+import AboutSection from "@/components/AboutSection";
+import ContactSection from "@/components/ContactSection";
+import Footer from "@/components/Footer";
 import type { Project } from "@/types/project";
 
-// Revalidate every 60 seconds (ISR)
 export const revalidate = 60;
 
 async function getProjects() {
@@ -41,30 +37,29 @@ export default async function HomePage() {
   const { coding, drawing } = await getProjects();
 
   return (
-    <ClientLayout>
+    <>
+      <Navigation />
       <Header />
 
       <main role="main">
-        {/* Coding Projects Section */}
         <section className="work" id="work">
           <div className="row">
             <h2 className="text-large mb-gutter-medium">My Coding</h2>
           </div>
           <div className="max-w-container mx-auto px-gutter-normal lg:px-gutter-medium xl:px-0">
             {coding.map((project) => (
-              <ProjectCard key={project.id} project={project} mode="iframe" />
+              <ProjectCard key={project.id} project={project} variant="coding" />
             ))}
           </div>
         </section>
 
-        {/* Drawing Projects Section */}
         <section className="work" id="drawing">
           <div className="row">
             <h2 className="text-large mb-gutter-medium">My Drawing</h2>
           </div>
           <div className="max-w-container mx-auto px-gutter-normal lg:px-gutter-medium xl:px-0">
             {drawing.map((project) => (
-              <DrawingCard key={project.id} project={project} />
+              <ProjectCard key={project.id} project={project} variant="drawing" />
             ))}
           </div>
         </section>
@@ -74,6 +69,6 @@ export default async function HomePage() {
 
       <ContactSection />
       <Footer />
-    </ClientLayout>
+    </>
   );
 }

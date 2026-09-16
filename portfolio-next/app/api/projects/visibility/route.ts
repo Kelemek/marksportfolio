@@ -1,6 +1,6 @@
-import { createClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/auth/requireAdmin";
+import { revalidatePublicContent } from "@/lib/revalidate";
 import { NextResponse } from "next/server";
-import { revalidatePath } from "next/cache";
 
 export async function POST(request: Request) {
   try {
@@ -13,18 +13,12 @@ export async function POST(request: Request) {
       );
     }
 
-    const supabase = await createClient();
-
-    // Verify user is authenticated
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const auth = await requireAdmin();
+    if (auth.error) {
+      return auth.error;
     }
 
-    const { error } = await supabase
+    const { error } = await auth.supabase
       .from("projects")
       .update({ is_visible })
       .eq("id", id);
@@ -33,8 +27,7 @@ export async function POST(request: Request) {
       throw error;
     }
 
-    revalidatePath("/admin");
-    revalidatePath("/");
+    revalidatePublicContent();
 
     return NextResponse.json({ success: true });
   } catch (error) {
