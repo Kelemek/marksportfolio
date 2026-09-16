@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   DndContext,
   closestCenter,
@@ -90,14 +91,20 @@ export default function SortableAdminTable<T extends { id: string }>({
   columns,
   onReorder,
 }: SortableAdminTableProps<T>) {
+  const router = useRouter();
   const [items, setItems] = useState(initialItems);
   const [saving, setSaving] = useState(false);
+  const savingRef = useRef(false);
 
   useEffect(() => {
-    if (!saving) {
+    savingRef.current = saving;
+  }, [saving]);
+
+  useEffect(() => {
+    if (!savingRef.current) {
       setItems(initialItems);
     }
-  }, [initialItems, saving]);
+  }, [initialItems]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -122,6 +129,7 @@ export default function SortableAdminTable<T extends { id: string }>({
     setSaving(true);
     try {
       await onReorder(newOrder.map((item) => item.id));
+      router.refresh();
     } catch (error) {
       console.error("Error saving order:", error);
       setItems(previousItems);
