@@ -153,10 +153,7 @@ describe('AdminProjectsClient Component', () => {
 
   describe('Visibility Toggle Handler', () => {
     it('calls visibility toggle API with correct payload', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({}),
-      });
+      mockFetch.mockResolvedValueOnce(new Response(null, { status: 200 }));
 
       render(
         <AdminProjectsClient codingProjects={mockCodingProjects} drawingProjects={[]} />
@@ -178,10 +175,7 @@ describe('AdminProjectsClient Component', () => {
     });
 
     it('calls router.refresh on successful visibility toggle', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({}),
-      });
+      mockFetch.mockResolvedValueOnce(new Response(null, { status: 200 }));
 
       render(
         <AdminProjectsClient codingProjects={mockCodingProjects} drawingProjects={[]} />
@@ -196,10 +190,7 @@ describe('AdminProjectsClient Component', () => {
     });
 
     it('toggles visibility from visible to hidden', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({}),
-      });
+      mockFetch.mockResolvedValueOnce(new Response(null, { status: 200 }));
 
       render(
         <AdminProjectsClient codingProjects={mockCodingProjects} drawingProjects={[]} />
@@ -220,10 +211,7 @@ describe('AdminProjectsClient Component', () => {
 
     it('handles API errors gracefully', async () => {
       const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-      mockFetch.mockResolvedValueOnce({
-        ok: false,
-        status: 500,
-      });
+      mockFetch.mockResolvedValueOnce(new Response(null, { status: 500 }));
 
       render(
         <AdminProjectsClient codingProjects={mockCodingProjects} drawingProjects={[]} />
@@ -261,10 +249,7 @@ describe('AdminProjectsClient Component', () => {
     });
 
     it('handles drawing project visibility toggle', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({}),
-      });
+      mockFetch.mockResolvedValueOnce(new Response(null, { status: 200 }));
 
       render(
         <AdminProjectsClient codingProjects={[]} drawingProjects={mockDrawingProjects} />
@@ -284,10 +269,7 @@ describe('AdminProjectsClient Component', () => {
     });
 
     it('handles multiple visibility toggles', async () => {
-      mockFetch.mockResolvedValue({
-        ok: true,
-        json: () => Promise.resolve({}),
-      });
+      mockFetch.mockResolvedValue(new Response(null, { status: 200 }));
 
       const multipleProjects: Project[] = [
         ...mockCodingProjects,

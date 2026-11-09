@@ -423,6 +423,7 @@ describe('ProjectForm', () => {
         eq: vi.fn().mockRejectedValue(new Error('Update failed')),
       });
       mockSupabaseClient.from.mockReturnValueOnce({
+        ...createProjectsTableMock(),
         update: mockUpdate,
       });
 
