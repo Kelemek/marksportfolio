@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { partnersSiteUrl } from "@/lib/romans8";
 
 export default function AboutSection() {
   return (
@@ -18,16 +19,27 @@ export default function AboutSection() {
             />
           </div>
 
-          {/* Text */}
           <div className="md:w-[48%] md:shrink-0">
             <p className="mb-gutter-small">
-              I am a systems engineer with over 29 years of experience who has
+              I am a systems engineer with over 30 years of experience who has
               transitioned into coding. I am currently located in Cambridge,
               Minnesota.
             </p>
             <p className="mb-gutter-small">
               I am also an ACBC certified Biblical counselor and enjoy drawing
               portraits on my iPad in my free time.
+            </p>
+            <p className="mb-gutter-small">
+              I coach local small businesses through my AI consulting practice,{" "}
+              <a
+                href={partnersSiteUrl}
+                className="whitespace-nowrap text-white underline decoration-pink underline-offset-4 hover:text-pink"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Romans 8 Partners
+              </a>
+              , helping them save time with practical AI tools.
             </p>
             <a
               href="https://resume.romans8.net"

@@ -23,8 +23,21 @@ describe('AboutSection Component', () => {
 
   it('displays the bio paragraphs', () => {
     render(<AboutSection />);
-    expect(screen.getByText(/systems engineer with over 29 years/)).toBeInTheDocument();
+    expect(screen.getByText(/systems engineer with over 30 years/)).toBeInTheDocument();
+    expect(screen.queryByText(/29 years/)).not.toBeInTheDocument();
     expect(screen.getByText(/ACBC certified Biblical counselor/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/coach local small businesses through my AI consulting practice/),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/practical AI tools/)).toBeInTheDocument();
+  });
+
+  it('links Romans 8 Partners from the consulting sentence', () => {
+    render(<AboutSection />);
+    const partners = screen.getByRole('link', { name: 'Romans 8 Partners' });
+    expect(partners).toHaveAttribute('href', 'https://partners.romans8.net');
+    expect(partners).toHaveAttribute('target', '_blank');
+    expect(partners).toHaveAttribute('rel', 'noopener noreferrer');
   });
 
   it('renders resume link with correct attributes', () => {
