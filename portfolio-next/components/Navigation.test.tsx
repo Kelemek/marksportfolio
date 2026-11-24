@@ -34,6 +34,7 @@ describe('Navigation Component', () => {
     expect(screen.getByRole('link', { name: 'About' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Contact' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Resumé' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Romans 8 Partners' })).toBeInTheDocument();
   });
 
   it('renders hash links with correct href on homepage', () => {
@@ -59,12 +60,30 @@ describe('Navigation Component', () => {
     expect(resumeLink).toHaveAttribute('rel', 'noopener noreferrer');
   });
 
+  it('renders Partners as the right-most external link with the R8 icon', () => {
+    render(<Navigation />);
+    const links = screen.getAllByRole('link');
+    const partners = links[links.length - 1];
+
+    expect(links[links.length - 2]).toHaveAccessibleName('Resumé');
+    expect(partners).toHaveAccessibleName('Romans 8 Partners');
+    expect(partners).toHaveTextContent('Partners');
+    expect(partners).toHaveAttribute('href', 'https://partners.romans8.net');
+    expect(partners).toHaveAttribute('target', '_blank');
+    expect(partners).toHaveAttribute('rel', 'noopener noreferrer');
+
+    const icon = partners.querySelector('img');
+    expect(icon).not.toBeNull();
+    expect(icon).toHaveAttribute('src', '/images/r8-icon.png');
+    expect(icon).toHaveAttribute('alt', '');
+  });
+
   it('renders as list of navigation items', () => {
     render(<Navigation />);
     const list = screen.getByRole('list');
     const listItems = screen.getAllByRole('listitem');
     expect(list).toBeInTheDocument();
-    expect(listItems).toHaveLength(5);
+    expect(listItems).toHaveLength(6);
   });
 
   it('applies nav class to navigation element', () => {

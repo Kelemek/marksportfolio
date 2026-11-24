@@ -31,14 +31,42 @@ describe('Footer Component', () => {
     render(<Footer />);
     const githubIcon = screen.getByAltText('GitHub');
     const linkedinIcon = screen.getByAltText('LinkedIn');
+    const partnersIcon = screen.getByAltText('Romans 8 Partners');
     expect(githubIcon).toBeInTheDocument();
     expect(linkedinIcon).toBeInTheDocument();
+    expect(partnersIcon).toBeInTheDocument();
+    expect(partnersIcon).toHaveAttribute('src', '/images/r8-icon.png');
+    expect(partnersIcon).toHaveClass(
+      'h-10',
+      'w-10',
+      'object-contain',
+      'transition-transform',
+      'hover:scale-110',
+    );
+  });
+
+  it('renders the Romans 8 Partners logo immediately after LinkedIn', () => {
+    render(<Footer />);
+    const links = screen.getAllByRole('link');
+    expect(links.map((link) => link.getAttribute('title'))).toEqual([
+      'Link to GitHub Profile',
+      'Link to LinkedIn Profile',
+      'Link to Romans 8 Partners',
+    ]);
+
+    const partners = screen.getByRole('link', { name: 'Romans 8 Partners' });
+    expect(partners).toHaveAttribute('href', 'https://partners.romans8.net');
+    expect(partners).toHaveAttribute('target', '_blank');
+    expect(partners).toHaveAttribute('rel', 'noopener noreferrer');
+    expect(partners).toHaveAttribute('title', 'Link to Romans 8 Partners');
+    expect(partners.textContent?.trim()).toBe('');
+    expect(partners).toContainElement(screen.getByAltText('Romans 8 Partners'));
   });
 
   it('renders all social links in a list', () => {
     render(<Footer />);
     const listItems = screen.getAllByRole('listitem');
-    expect(listItems).toHaveLength(2);
+    expect(listItems).toHaveLength(3);
   });
 
   it('applies correct list semantics', () => {

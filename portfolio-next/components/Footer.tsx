@@ -1,6 +1,15 @@
 import Image from "next/image";
+import { partnersSiteUrl } from "@/lib/romans8";
 
-const socialLinks = [
+type SocialLink = {
+  href: string;
+  icon: string;
+  alt: string;
+  title: string;
+  unoptimized?: boolean;
+};
+
+const socialLinks: SocialLink[] = [
   {
     href: "https://github.com/kelemek/",
     icon: "/images/github.svg",
@@ -12,6 +21,13 @@ const socialLinks = [
     icon: "/images/linkedin.svg",
     alt: "LinkedIn",
     title: "Link to LinkedIn Profile",
+  },
+  {
+    href: partnersSiteUrl,
+    icon: "/images/r8-icon.png",
+    alt: "Romans 8 Partners",
+    title: "Link to Romans 8 Partners",
+    unoptimized: true,
   },
 ];
 
@@ -33,7 +49,12 @@ export default function Footer() {
                   width={40}
                   height={40}
                   alt={link.alt}
-                  className="h-10 w-10 transition-transform hover:scale-110"
+                  unoptimized={link.unoptimized}
+                  className={
+                    link.unoptimized
+                      ? "h-10 w-10 object-contain transition-transform hover:scale-110"
+                      : "h-10 w-10 transition-transform hover:scale-110"
+                  }
                 />
               </a>
             </li>
