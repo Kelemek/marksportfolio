@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import { Suspense } from "react";
 import { PostHogPageView } from "@/components/PostHogPageView";
 import { PostHogProvider } from "@/components/PostHogProvider";
+import { portfolioSiteUrl } from "@/lib/romans8";
 import "./globals.css";
 
 const hkGrotesk = localFont({
@@ -33,7 +34,7 @@ export const metadata: Metadata = {
     "Next.js",
     "Cambridge Minnesota",
   ],
-  metadataBase: new URL("https://marklarsonportfolio.vercel.app"),
+  metadataBase: new URL(portfolioSiteUrl),
 };
 
 export default function RootLayout({
